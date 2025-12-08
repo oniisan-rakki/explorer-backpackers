@@ -12,7 +12,10 @@
     "next": "latest",
     "react": "latest",
     "react-dom": "latest",
-    "firebase": "^10.0.0"
+    "firebase": "^10.0.0",
+    "tailwindcss": "latest",
+    "postcss": "latest",
+    "@tailwindcss/postcss": "latest"
   },
   "devDependencies": {
     "typescript": "^5.0.0",
