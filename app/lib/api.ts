@@ -2,7 +2,7 @@ import { addDoc, collection } from "firebase/firestore";
 // UPDATE THIS PATH: Point to wherever you initialized your firebase app
 import { db } from "./firebase"; 
 
-// --- TYPES (Kept the same) ---
+// --- TYPES ---
 type AccommodationBookingDetails = {
   amount: number;
   firstName: string;
@@ -30,7 +30,7 @@ type TourBookingDetails = {
   note: string;
 };
 
-// --- HELPER: Availability Check (Kept the same) ---
+// --- HELPER: Availability Check ---
 export const checkRoomAvailability = async (
   startDate: string, 
   endDate: string, 
@@ -63,9 +63,8 @@ export const checkRoomAvailability = async (
 };
 
 // --- UNIFIED PAYMENT FUNCTION ---
-// We use one function to call the backend, but separate helper wrappers below.
 async function initiateCheckout(amount: number, bookingId: string, bookingType: 'tour' | 'accommodation') {
-  // 1. URL to your new Cloud Function
+  // 1. URL to your Cloud Function
   const url = `https://us-central1-explorer-backpackers.cloudfunctions.net/processYocoPayment`;
 
   try {
@@ -88,7 +87,10 @@ async function initiateCheckout(amount: number, bookingId: string, bookingType: 
 
     // 3. Return the Yoco Redirect URL
     const data = await response.json();
-    return data; // This object usually contains { redirectUrl: "..." }
+    
+    // --- CRITICAL FIX: Return the string, not the object ---
+    return data.redirectUrl; 
+    
   } catch (error) {
     console.error('Error initiating checkout:', error);
     throw error;
