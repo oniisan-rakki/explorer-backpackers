@@ -1,36 +1,48 @@
 "use client";
 import React from 'react';
 
-// --- NEW: Define the types for the component's props ---
+// --- Updated: Added 'size' to the props definition ---
 type ButtonProps = {
-  children: React.ReactNode; // 'children' can be text, other components, etc.
-  onClick?: React.MouseEventHandler<HTMLButtonElement>; // A function for when the button is clicked
-  variant?: 'primary' | 'secondary' | 'outline'; // Restrict 'variant' to only these strings
-  className?: string; // className is optional
-  type?: 'button' | 'submit' | 'reset'; // Restrict 'type' to valid button types
-  disabled?: boolean; // disabled is optional
+  children: React.ReactNode;
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
+  variant?: 'primary' | 'secondary' | 'outline';
+  size?: 'sm' | 'md' | 'lg'; // NEW: Allow different sizes
+  className?: string;
+  type?: 'button' | 'submit' | 'reset';
+  disabled?: boolean;
 };
 
-// --- Reusable Button Component (with types applied) ---
 export const Button = ({ 
   children, 
   onClick, 
   variant = 'primary', 
+  size = 'md', // Default to medium if not specified
   className = '', 
   type = 'button', 
   disabled = false 
-}: ButtonProps) => { // <-- The types are applied here
+}: ButtonProps) => {
+  
+  // Color styles
   const styles = {
     primary: 'bg-black text-white hover:bg-green-700 disabled:bg-green-300',
     secondary: 'bg-white text-black hover:bg-green-600 hover:text-white disabled:bg-gray-100',
     outline: 'border border-white text-white hover:bg-white hover:text-gray-900'
   };
+
+  // NEW: Size styles
+  const sizes = {
+    sm: 'px-4 py-2 text-sm',
+    md: 'px-6 py-3',
+    lg: 'px-8 py-4 text-lg'
+  };
+
   return (
     <button
       type={type}
       onClick={onClick}
       disabled={disabled}
-      className={`px-6 py-3 rounded-md font-semibold transition-all duration-300 ${styles[variant]} ${className}`}
+      // Combine variant style + size style + custom className
+      className={`rounded-md font-semibold transition-all duration-300 ${styles[variant]} ${sizes[size]} ${className}`}
     >
       {children}
     </button>
