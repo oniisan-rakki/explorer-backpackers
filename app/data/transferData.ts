@@ -405,7 +405,7 @@ export const transferData = [
     hotelPickupAvailable: true, // Pickup from any hotel or address in Johannesburg
     pricingTiers: [],
     img: images.privateTransferCradleOfHumankindSterkfonteinCavesTourOne,
-    gallery: [images.privateTransferCradleOfHumankindSterkfonteinCavesTourTwo, images.privateTransferCradleOfHumankindSterkfonteinCavesTourThree, images.privateTransferCradleOfHumankindSterkfonteinCavesTourFour, images.privateTransferCradleOfHumankindSterkfonteinCavesTourFive, images.privateTransferCradleOfHumankindSterkfonteinCavesTourSix],
+    gallery: [images.privateTransferCradleOfHumankindSterkfonteinCavesTourTwo, images.privateTransferCradleOfHumankindSterkfonteinCavesTourThree, images.privateTransferCradleOfHumankindSterkfonteinCavesTourFour, images.privateTransferCradleOfHumankindAndSterkfonteinCavesTourFive, images.privateTransferCradleOfHumankindAndSterkfonteinCavesTourSix],
     overview: 'A private, fully guided day tour including comfortable transfer from Johannesburg to the Cradle of Humankind.',
     duration: '1 Day',
     whatIsIncluded: [
