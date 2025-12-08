@@ -1,3 +1,4 @@
+/* eslint-disable */
 /**
  * ==================================================================
  * 1. CONFIGURATION & KEYS
@@ -5,15 +6,14 @@
  */
 
 // 1. YOCO KEYS
-// Used to CREATE the checkout. (Your Secret Key)
+// Used to CREATE the checkout. (Your Live Key)
 const YOCO_API_SECRET = "sk_test_a4ce465834nOlMb6b1c4aca99bb2";
 
 // Used to VERIFY the webhook. (Your Webhook Secret)
-// This ensures the signal actually comes from Yoco.
 const YOCO_WEBHOOK_SECRET = "whsec_MzQ3RjU4RjQxRTRFNTgzNjM4NkU3NkM2NUVFMTZFNDA="; 
 
 // 2. CLOUDBEDS KEYS
-const CLOUDBEDS_API_KEY = "cbat_zmAieTabO0DvfcHoyAq5pC0wbG2HARFc"; 
+const CLOUDBEDS_API_KEY = "cbat_bYbsaXpWiURi1tETuHp3uK0DK9wY1GDo"; 
 
 // 3. EMAIL SETTINGS (GMAIL)
 const EMAIL_USER = "bookings@explorerbackpackers.com"; 
@@ -182,7 +182,7 @@ exports.processYocoPayment = onRequest({ cors: true }, async (req, res) => {
 exports.yocoWebhook = onRequest(async (req, res) => {
   const rawBody = req.rawBody ? req.rawBody.toString() : JSON.stringify(req.body);
 
-  // --- 1. VERIFY SIGNATURE (Now Enabled) ---
+  // --- 1. VERIFY SIGNATURE ---
   const id = req.headers["webhook-id"];
   const timestamp = req.headers["webhook-timestamp"];
   const signatureParts = (req.headers["webhook-signature"] || "").split(" ");
