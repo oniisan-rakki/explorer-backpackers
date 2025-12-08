@@ -4,7 +4,7 @@ import { db } from "./firebase";
 
 // --- TYPES (Kept the same) ---
 type AccommodationBookingDetails = {
-  totalCost: number;
+  amount: number;
   firstName: string;
   lastName: string;
   email: string;
@@ -19,7 +19,7 @@ type AccommodationBookingDetails = {
 };
 
 type TourBookingDetails = {
-  totalCost: number;
+  amount: number;
   firstName: string;
   lastName: string;
   email: string;
@@ -106,7 +106,7 @@ export async function processYocoPayment(bookingDetails: AccommodationBookingDet
     });
 
     // B. Initiate Payment with the new ID
-    return await initiateCheckout(bookingDetails.totalCost, docRef.id, 'accommodation');
+    return await initiateCheckout(bookingDetails.amount, docRef.id, 'accommodation');
 
   } catch (error) {
     console.error("Accommodation Booking Failed:", error);
@@ -125,7 +125,7 @@ export async function processYocoTourPayment(tourBookingDetails: TourBookingDeta
     });
 
     // B. Initiate Payment with the new ID
-    return await initiateCheckout(tourBookingDetails.totalCost, docRef.id, 'tour');
+    return await initiateCheckout(tourBookingDetails.amount, docRef.id, 'tour');
 
   } catch (error) {
     console.error("Tour Booking Failed:", error);
