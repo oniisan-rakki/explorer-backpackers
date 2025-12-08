@@ -1,0 +1,14 @@
+{
+  "/_not-found/page": "app/_not-found/page.js",
+  "/accommodation/page": "app/accommodation/page.js",
+  "/book-tour/page": "app/book-tour/page.js",
+  "/book/page": "app/book/page.js",
+  "/checkout/page": "app/checkout/page.js",
+  "/contact/page": "app/contact/page.js",
+  "/experiences/page": "app/experiences/page.js",
+  "/groupbookings/page": "app/groupbookings/page.js",
+  "/offers/page": "app/offers/page.js",
+  "/page": "app/page.js",
+  "/tours/[slug]/page": "app/tours/[slug]/page.js",
+  "/tours/details/[id]/page": "app/tours/details/[id]/page.js"
+}

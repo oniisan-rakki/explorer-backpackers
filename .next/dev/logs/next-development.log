@@ -1,0 +1,1002 @@
+[00:00:01.524] Server  LOG      ✓ Ready in 1180ms
+[00:00:04.906] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:03:27.358] Server  LOG      ✓ Compiled in 291ms
+[00:03:28.349] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:03:33.771] Server  LOG      ✓ Compiled in 368ms
+[03:34:13.004] Browser WARN    Google Maps JavaScript API has been loaded directly without loading=async. This can result in suboptimal performance. For best-practice loading patterns please see https://goo.gle/js-api-loading
+[03:34:13.005] Browser WARN    As of March 1st, 2025, google.maps.places.Autocomplete is not available to new customers. Please use google.maps.places.PlaceAutocompleteElement instead. At this time, google.maps.places.Autocomplete is not scheduled to be discontinued, but google.maps.places.PlaceAutocompleteElement is recommended over google.maps.places.Autocomplete. While google.maps.places.Autocomplete will continue to receive bug fixes for any major regressions, existing bugs in google.maps.places.Autocomplete will not be addressed. At least 12 months notice will be given before support is discontinued. Please see https://developers.google.com/maps/legacy for additional details and https://developers.google.com/maps/documentation/javascript/places-migration-overview for the migration guide.
+[03:34:19.564] Browser WARN    Google Maps JavaScript API warning: InvalidKey https://developers.google.com/maps/documentation/javascript/error-messages#invalid-key
+[04:14:21.879] Server  ERROR    ⨯ ./explorerbackpackers/app/lib/api.ts:3:1
+Module not found: Can't resolve './firebase'
+  1 | import { addDoc, collection } from "firebase/firestore";
+  2 | // UPDATE THIS PATH: Point to wherever you initialized your firebase app
+> 3 | import { db } from "./firebase"; 
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  4 |
+  5 | // --- TYPES (Kept the same) ---
+  6 | type AccommodationBookingDetails = {
+
+
+
+Import traces:
+  Client Component Browser:
+    ./explorerbackpackers/app/lib/api.ts [Client Component Browser]
+    ./explorerbackpackers/app/book-tour/page.tsx [Client Component Browser]
+    ./explorerbackpackers/app/book-tour/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./explorerbackpackers/app/lib/api.ts [Client Component SSR]
+    ./explorerbackpackers/app/book-tour/page.tsx [Client Component SSR]
+    ./explorerbackpackers/app/book-tour/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[04:14:21.884] Server  ERROR    ⨯ ./explorerbackpackers/app/lib/api.ts:3:1
+Module not found: Can't resolve './firebase'
+  1 | import { addDoc, collection } from "firebase/firestore";
+  2 | // UPDATE THIS PATH: Point to wherever you initialized your firebase app
+> 3 | import { db } from "./firebase"; 
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  4 |
+  5 | // --- TYPES (Kept the same) ---
+  6 | type AccommodationBookingDetails = {
+
+
+
+Import traces:
+  Client Component Browser:
+    ./explorerbackpackers/app/lib/api.ts [Client Component Browser]
+    ./explorerbackpackers/app/book-tour/page.tsx [Client Component Browser]
+    ./explorerbackpackers/app/book-tour/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./explorerbackpackers/app/lib/api.ts [Client Component SSR]
+    ./explorerbackpackers/app/book-tour/page.tsx [Client Component SSR]
+    ./explorerbackpackers/app/book-tour/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[04:14:21.891] Server  ERROR    ⨯ ./explorerbackpackers/app/lib/api.ts:3:1
+Module not found: Can't resolve './firebase'
+  1 | import { addDoc, collection } from "firebase/firestore";
+  2 | // UPDATE THIS PATH: Point to wherever you initialized your firebase app
+> 3 | import { db } from "./firebase"; 
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  4 |
+  5 | // --- TYPES (Kept the same) ---
+  6 | type AccommodationBookingDetails = {
+
+
+
+Import traces:
+  Client Component Browser:
+    ./explorerbackpackers/app/lib/api.ts [Client Component Browser]
+    ./explorerbackpackers/app/book-tour/page.tsx [Client Component Browser]
+    ./explorerbackpackers/app/book-tour/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./explorerbackpackers/app/lib/api.ts [Client Component SSR]
+    ./explorerbackpackers/app/book-tour/page.tsx [Client Component SSR]
+    ./explorerbackpackers/app/book-tour/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[04:14:21.894] Server  ERROR    ⨯ ./explorerbackpackers/app/lib/api.ts:3:1
+Module not found: Can't resolve './firebase'
+  1 | import { addDoc, collection } from "firebase/firestore";
+  2 | // UPDATE THIS PATH: Point to wherever you initialized your firebase app
+> 3 | import { db } from "./firebase"; 
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  4 |
+  5 | // --- TYPES (Kept the same) ---
+  6 | type AccommodationBookingDetails = {
+
+
+
+Import traces:
+  Client Component Browser:
+    ./explorerbackpackers/app/lib/api.ts [Client Component Browser]
+    ./explorerbackpackers/app/book-tour/page.tsx [Client Component Browser]
+    ./explorerbackpackers/app/book-tour/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./explorerbackpackers/app/lib/api.ts [Client Component SSR]
+    ./explorerbackpackers/app/book-tour/page.tsx [Client Component SSR]
+    ./explorerbackpackers/app/book-tour/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[04:14:21.900] Server  ERROR    ⨯ ./explorerbackpackers/app/lib/api.ts:3:1
+Module not found: Can't resolve './firebase'
+  1 | import { addDoc, collection } from "firebase/firestore";
+  2 | // UPDATE THIS PATH: Point to wherever you initialized your firebase app
+> 3 | import { db } from "./firebase"; 
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  4 |
+  5 | // --- TYPES (Kept the same) ---
+  6 | type AccommodationBookingDetails = {
+
+
+
+Import traces:
+  Client Component Browser:
+    ./explorerbackpackers/app/lib/api.ts [Client Component Browser]
+    ./explorerbackpackers/app/checkout/page.tsx [Client Component Browser]
+    ./explorerbackpackers/app/checkout/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./explorerbackpackers/app/lib/api.ts [Client Component SSR]
+    ./explorerbackpackers/app/checkout/page.tsx [Client Component SSR]
+    ./explorerbackpackers/app/checkout/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[04:14:21.903] Server  ERROR    ⨯ ./explorerbackpackers/app/lib/api.ts:3:1
+Module not found: Can't resolve './firebase'
+  1 | import { addDoc, collection } from "firebase/firestore";
+  2 | // UPDATE THIS PATH: Point to wherever you initialized your firebase app
+> 3 | import { db } from "./firebase"; 
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  4 |
+  5 | // --- TYPES (Kept the same) ---
+  6 | type AccommodationBookingDetails = {
+
+
+
+Import traces:
+  Client Component Browser:
+    ./explorerbackpackers/app/lib/api.ts [Client Component Browser]
+    ./explorerbackpackers/app/checkout/page.tsx [Client Component Browser]
+    ./explorerbackpackers/app/checkout/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./explorerbackpackers/app/lib/api.ts [Client Component SSR]
+    ./explorerbackpackers/app/checkout/page.tsx [Client Component SSR]
+    ./explorerbackpackers/app/checkout/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[04:14:21.905] Server  ERROR    ⨯ ./explorerbackpackers/app/lib/api.ts:3:1
+Module not found: Can't resolve './firebase'
+  1 | import { addDoc, collection } from "firebase/firestore";
+  2 | // UPDATE THIS PATH: Point to wherever you initialized your firebase app
+> 3 | import { db } from "./firebase"; 
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  4 |
+  5 | // --- TYPES (Kept the same) ---
+  6 | type AccommodationBookingDetails = {
+
+
+
+Import traces:
+  Client Component Browser:
+    ./explorerbackpackers/app/lib/api.ts [Client Component Browser]
+    ./explorerbackpackers/app/checkout/page.tsx [Client Component Browser]
+    ./explorerbackpackers/app/checkout/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./explorerbackpackers/app/lib/api.ts [Client Component SSR]
+    ./explorerbackpackers/app/checkout/page.tsx [Client Component SSR]
+    ./explorerbackpackers/app/checkout/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[04:14:21.908] Server  ERROR    ⨯ ./explorerbackpackers/app/lib/api.ts:3:1
+Module not found: Can't resolve './firebase'
+  1 | import { addDoc, collection } from "firebase/firestore";
+  2 | // UPDATE THIS PATH: Point to wherever you initialized your firebase app
+> 3 | import { db } from "./firebase"; 
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  4 |
+  5 | // --- TYPES (Kept the same) ---
+  6 | type AccommodationBookingDetails = {
+
+
+
+Import traces:
+  Client Component Browser:
+    ./explorerbackpackers/app/lib/api.ts [Client Component Browser]
+    ./explorerbackpackers/app/checkout/page.tsx [Client Component Browser]
+    ./explorerbackpackers/app/checkout/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./explorerbackpackers/app/lib/api.ts [Client Component SSR]
+    ./explorerbackpackers/app/checkout/page.tsx [Client Component SSR]
+    ./explorerbackpackers/app/checkout/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[04:14:21.910] Server  ERROR    ⨯ ./explorerbackpackers/app/lib/api.ts:3:1
+Module not found: Can't resolve './firebase'
+  1 | import { addDoc, collection } from "firebase/firestore";
+  2 | // UPDATE THIS PATH: Point to wherever you initialized your firebase app
+> 3 | import { db } from "./firebase"; 
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  4 |
+  5 | // --- TYPES (Kept the same) ---
+  6 | type AccommodationBookingDetails = {
+
+
+
+Import traces:
+  Client Component Browser:
+    ./explorerbackpackers/app/lib/api.ts [Client Component Browser]
+    ./explorerbackpackers/app/book/page.tsx [Client Component Browser]
+    ./explorerbackpackers/app/book/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./explorerbackpackers/app/lib/api.ts [Client Component SSR]
+    ./explorerbackpackers/app/book/page.tsx [Client Component SSR]
+    ./explorerbackpackers/app/book/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[04:14:21.913] Server  ERROR    ⨯ ./explorerbackpackers/app/lib/api.ts:3:1
+Module not found: Can't resolve './firebase'
+  1 | import { addDoc, collection } from "firebase/firestore";
+  2 | // UPDATE THIS PATH: Point to wherever you initialized your firebase app
+> 3 | import { db } from "./firebase"; 
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  4 |
+  5 | // --- TYPES (Kept the same) ---
+  6 | type AccommodationBookingDetails = {
+
+
+
+Import traces:
+  Client Component Browser:
+    ./explorerbackpackers/app/lib/api.ts [Client Component Browser]
+    ./explorerbackpackers/app/book/page.tsx [Client Component Browser]
+    ./explorerbackpackers/app/book/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./explorerbackpackers/app/lib/api.ts [Client Component SSR]
+    ./explorerbackpackers/app/book/page.tsx [Client Component SSR]
+    ./explorerbackpackers/app/book/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[04:14:21.915] Server  ERROR    ⨯ ./explorerbackpackers/app/lib/api.ts:3:1
+Module not found: Can't resolve './firebase'
+  1 | import { addDoc, collection } from "firebase/firestore";
+  2 | // UPDATE THIS PATH: Point to wherever you initialized your firebase app
+> 3 | import { db } from "./firebase"; 
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  4 |
+  5 | // --- TYPES (Kept the same) ---
+  6 | type AccommodationBookingDetails = {
+
+
+
+Import traces:
+  Client Component Browser:
+    ./explorerbackpackers/app/lib/api.ts [Client Component Browser]
+    ./explorerbackpackers/app/book/page.tsx [Client Component Browser]
+    ./explorerbackpackers/app/book/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./explorerbackpackers/app/lib/api.ts [Client Component SSR]
+    ./explorerbackpackers/app/book/page.tsx [Client Component SSR]
+    ./explorerbackpackers/app/book/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[04:14:21.918] Server  ERROR    ⨯ ./explorerbackpackers/app/lib/api.ts:3:1
+Module not found: Can't resolve './firebase'
+  1 | import { addDoc, collection } from "firebase/firestore";
+  2 | // UPDATE THIS PATH: Point to wherever you initialized your firebase app
+> 3 | import { db } from "./firebase"; 
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  4 |
+  5 | // --- TYPES (Kept the same) ---
+  6 | type AccommodationBookingDetails = {
+
+
+
+Import traces:
+  Client Component Browser:
+    ./explorerbackpackers/app/lib/api.ts [Client Component Browser]
+    ./explorerbackpackers/app/book/page.tsx [Client Component Browser]
+    ./explorerbackpackers/app/book/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./explorerbackpackers/app/lib/api.ts [Client Component SSR]
+    ./explorerbackpackers/app/book/page.tsx [Client Component SSR]
+    ./explorerbackpackers/app/book/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[04:14:22.261] Server  ERROR    ⨯ ./explorerbackpackers/app/lib/api.ts:3:1
+Module not found: Can't resolve './firebase'
+  1 | import { addDoc, collection } from "firebase/firestore";
+  2 | // UPDATE THIS PATH: Point to wherever you initialized your firebase app
+> 3 | import { db } from "./firebase"; 
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  4 |
+  5 | // --- TYPES (Kept the same) ---
+  6 | type AccommodationBookingDetails = {
+
+
+
+Import traces:
+  Client Component Browser:
+    ./explorerbackpackers/app/lib/api.ts [Client Component Browser]
+    ./explorerbackpackers/app/book/page.tsx [Client Component Browser]
+    ./explorerbackpackers/app/book/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./explorerbackpackers/app/lib/api.ts [Client Component SSR]
+    ./explorerbackpackers/app/book/page.tsx [Client Component SSR]
+    ./explorerbackpackers/app/book/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[04:14:22.263] Server  ERROR    ⨯ ./explorerbackpackers/app/lib/api.ts:3:1
+Module not found: Can't resolve './firebase'
+  1 | import { addDoc, collection } from "firebase/firestore";
+  2 | // UPDATE THIS PATH: Point to wherever you initialized your firebase app
+> 3 | import { db } from "./firebase"; 
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  4 |
+  5 | // --- TYPES (Kept the same) ---
+  6 | type AccommodationBookingDetails = {
+
+
+
+Import traces:
+  Client Component Browser:
+    ./explorerbackpackers/app/lib/api.ts [Client Component Browser]
+    ./explorerbackpackers/app/book/page.tsx [Client Component Browser]
+    ./explorerbackpackers/app/book/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./explorerbackpackers/app/lib/api.ts [Client Component SSR]
+    ./explorerbackpackers/app/book/page.tsx [Client Component SSR]
+    ./explorerbackpackers/app/book/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[04:14:22.265] Server  ERROR    ⨯ ./explorerbackpackers/app/lib/api.ts:3:1
+Module not found: Can't resolve './firebase'
+  1 | import { addDoc, collection } from "firebase/firestore";
+  2 | // UPDATE THIS PATH: Point to wherever you initialized your firebase app
+> 3 | import { db } from "./firebase"; 
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  4 |
+  5 | // --- TYPES (Kept the same) ---
+  6 | type AccommodationBookingDetails = {
+
+
+
+Import traces:
+  Client Component Browser:
+    ./explorerbackpackers/app/lib/api.ts [Client Component Browser]
+    ./explorerbackpackers/app/book/page.tsx [Client Component Browser]
+    ./explorerbackpackers/app/book/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./explorerbackpackers/app/lib/api.ts [Client Component SSR]
+    ./explorerbackpackers/app/book/page.tsx [Client Component SSR]
+    ./explorerbackpackers/app/book/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[04:14:22.268] Server  ERROR    ⨯ ./explorerbackpackers/app/lib/api.ts:3:1
+Module not found: Can't resolve './firebase'
+  1 | import { addDoc, collection } from "firebase/firestore";
+  2 | // UPDATE THIS PATH: Point to wherever you initialized your firebase app
+> 3 | import { db } from "./firebase"; 
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  4 |
+  5 | // --- TYPES (Kept the same) ---
+  6 | type AccommodationBookingDetails = {
+
+
+
+Import traces:
+  Client Component Browser:
+    ./explorerbackpackers/app/lib/api.ts [Client Component Browser]
+    ./explorerbackpackers/app/book/page.tsx [Client Component Browser]
+    ./explorerbackpackers/app/book/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./explorerbackpackers/app/lib/api.ts [Client Component SSR]
+    ./explorerbackpackers/app/book/page.tsx [Client Component SSR]
+    ./explorerbackpackers/app/book/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[04:14:22.273] Server  ERROR    ⨯ ./explorerbackpackers/app/lib/api.ts:3:1
+Module not found: Can't resolve './firebase'
+  1 | import { addDoc, collection } from "firebase/firestore";
+  2 | // UPDATE THIS PATH: Point to wherever you initialized your firebase app
+> 3 | import { db } from "./firebase"; 
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  4 |
+  5 | // --- TYPES (Kept the same) ---
+  6 | type AccommodationBookingDetails = {
+
+
+
+Import traces:
+  Client Component Browser:
+    ./explorerbackpackers/app/lib/api.ts [Client Component Browser]
+    ./explorerbackpackers/app/book/page.tsx [Client Component Browser]
+    ./explorerbackpackers/app/book/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./explorerbackpackers/app/lib/api.ts [Client Component SSR]
+    ./explorerbackpackers/app/book/page.tsx [Client Component SSR]
+    ./explorerbackpackers/app/book/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[04:14:22.274] Server  ERROR    ⨯ ./explorerbackpackers/app/lib/api.ts:3:1
+Module not found: Can't resolve './firebase'
+  1 | import { addDoc, collection } from "firebase/firestore";
+  2 | // UPDATE THIS PATH: Point to wherever you initialized your firebase app
+> 3 | import { db } from "./firebase"; 
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  4 |
+  5 | // --- TYPES (Kept the same) ---
+  6 | type AccommodationBookingDetails = {
+
+
+
+Import traces:
+  Client Component Browser:
+    ./explorerbackpackers/app/lib/api.ts [Client Component Browser]
+    ./explorerbackpackers/app/book/page.tsx [Client Component Browser]
+    ./explorerbackpackers/app/book/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./explorerbackpackers/app/lib/api.ts [Client Component SSR]
+    ./explorerbackpackers/app/book/page.tsx [Client Component SSR]
+    ./explorerbackpackers/app/book/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[04:14:22.276] Server  ERROR    ⨯ ./explorerbackpackers/app/lib/api.ts:3:1
+Module not found: Can't resolve './firebase'
+  1 | import { addDoc, collection } from "firebase/firestore";
+  2 | // UPDATE THIS PATH: Point to wherever you initialized your firebase app
+> 3 | import { db } from "./firebase"; 
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  4 |
+  5 | // --- TYPES (Kept the same) ---
+  6 | type AccommodationBookingDetails = {
+
+
+
+Import traces:
+  Client Component Browser:
+    ./explorerbackpackers/app/lib/api.ts [Client Component Browser]
+    ./explorerbackpackers/app/book/page.tsx [Client Component Browser]
+    ./explorerbackpackers/app/book/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./explorerbackpackers/app/lib/api.ts [Client Component SSR]
+    ./explorerbackpackers/app/book/page.tsx [Client Component SSR]
+    ./explorerbackpackers/app/book/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[04:14:22.278] Server  ERROR    ⨯ ./explorerbackpackers/app/lib/api.ts:3:1
+Module not found: Can't resolve './firebase'
+  1 | import { addDoc, collection } from "firebase/firestore";
+  2 | // UPDATE THIS PATH: Point to wherever you initialized your firebase app
+> 3 | import { db } from "./firebase"; 
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  4 |
+  5 | // --- TYPES (Kept the same) ---
+  6 | type AccommodationBookingDetails = {
+
+
+
+Import traces:
+  Client Component Browser:
+    ./explorerbackpackers/app/lib/api.ts [Client Component Browser]
+    ./explorerbackpackers/app/book/page.tsx [Client Component Browser]
+    ./explorerbackpackers/app/book/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./explorerbackpackers/app/lib/api.ts [Client Component SSR]
+    ./explorerbackpackers/app/book/page.tsx [Client Component SSR]
+    ./explorerbackpackers/app/book/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[04:14:22.293] Server  ERROR    ⨯ ./explorerbackpackers/app/lib/api.ts:3:1
+Module not found: Can't resolve './firebase'
+  1 | import { addDoc, collection } from "firebase/firestore";
+  2 | // UPDATE THIS PATH: Point to wherever you initialized your firebase app
+> 3 | import { db } from "./firebase"; 
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  4 |
+  5 | // --- TYPES (Kept the same) ---
+  6 | type AccommodationBookingDetails = {
+
+
+
+Import traces:
+  Client Component Browser:
+    ./explorerbackpackers/app/lib/api.ts [Client Component Browser]
+    ./explorerbackpackers/app/checkout/page.tsx [Client Component Browser]
+    ./explorerbackpackers/app/checkout/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./explorerbackpackers/app/lib/api.ts [Client Component SSR]
+    ./explorerbackpackers/app/checkout/page.tsx [Client Component SSR]
+    ./explorerbackpackers/app/checkout/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[04:14:22.294] Server  ERROR    ⨯ ./explorerbackpackers/app/lib/api.ts:3:1
+Module not found: Can't resolve './firebase'
+  1 | import { addDoc, collection } from "firebase/firestore";
+  2 | // UPDATE THIS PATH: Point to wherever you initialized your firebase app
+> 3 | import { db } from "./firebase"; 
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  4 |
+  5 | // --- TYPES (Kept the same) ---
+  6 | type AccommodationBookingDetails = {
+
+
+
+Import traces:
+  Client Component Browser:
+    ./explorerbackpackers/app/lib/api.ts [Client Component Browser]
+    ./explorerbackpackers/app/checkout/page.tsx [Client Component Browser]
+    ./explorerbackpackers/app/checkout/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./explorerbackpackers/app/lib/api.ts [Client Component SSR]
+    ./explorerbackpackers/app/checkout/page.tsx [Client Component SSR]
+    ./explorerbackpackers/app/checkout/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[04:14:22.295] Server  ERROR    ⨯ ./explorerbackpackers/app/lib/api.ts:3:1
+Module not found: Can't resolve './firebase'
+  1 | import { addDoc, collection } from "firebase/firestore";
+  2 | // UPDATE THIS PATH: Point to wherever you initialized your firebase app
+> 3 | import { db } from "./firebase"; 
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  4 |
+  5 | // --- TYPES (Kept the same) ---
+  6 | type AccommodationBookingDetails = {
+
+
+
+Import traces:
+  Client Component Browser:
+    ./explorerbackpackers/app/lib/api.ts [Client Component Browser]
+    ./explorerbackpackers/app/checkout/page.tsx [Client Component Browser]
+    ./explorerbackpackers/app/checkout/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./explorerbackpackers/app/lib/api.ts [Client Component SSR]
+    ./explorerbackpackers/app/checkout/page.tsx [Client Component SSR]
+    ./explorerbackpackers/app/checkout/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[04:14:22.297] Server  ERROR    ⨯ ./explorerbackpackers/app/lib/api.ts:3:1
+Module not found: Can't resolve './firebase'
+  1 | import { addDoc, collection } from "firebase/firestore";
+  2 | // UPDATE THIS PATH: Point to wherever you initialized your firebase app
+> 3 | import { db } from "./firebase"; 
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  4 |
+  5 | // --- TYPES (Kept the same) ---
+  6 | type AccommodationBookingDetails = {
+
+
+
+Import traces:
+  Client Component Browser:
+    ./explorerbackpackers/app/lib/api.ts [Client Component Browser]
+    ./explorerbackpackers/app/checkout/page.tsx [Client Component Browser]
+    ./explorerbackpackers/app/checkout/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./explorerbackpackers/app/lib/api.ts [Client Component SSR]
+    ./explorerbackpackers/app/checkout/page.tsx [Client Component SSR]
+    ./explorerbackpackers/app/checkout/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[04:14:22.299] Server  ERROR    ⨯ ./explorerbackpackers/app/lib/api.ts:3:1
+Module not found: Can't resolve './firebase'
+  1 | import { addDoc, collection } from "firebase/firestore";
+  2 | // UPDATE THIS PATH: Point to wherever you initialized your firebase app
+> 3 | import { db } from "./firebase"; 
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  4 |
+  5 | // --- TYPES (Kept the same) ---
+  6 | type AccommodationBookingDetails = {
+
+
+
+Import traces:
+  Client Component Browser:
+    ./explorerbackpackers/app/lib/api.ts [Client Component Browser]
+    ./explorerbackpackers/app/checkout/page.tsx [Client Component Browser]
+    ./explorerbackpackers/app/checkout/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./explorerbackpackers/app/lib/api.ts [Client Component SSR]
+    ./explorerbackpackers/app/checkout/page.tsx [Client Component SSR]
+    ./explorerbackpackers/app/checkout/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[04:14:22.302] Server  ERROR    ⨯ ./explorerbackpackers/app/lib/api.ts:3:1
+Module not found: Can't resolve './firebase'
+  1 | import { addDoc, collection } from "firebase/firestore";
+  2 | // UPDATE THIS PATH: Point to wherever you initialized your firebase app
+> 3 | import { db } from "./firebase"; 
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  4 |
+  5 | // --- TYPES (Kept the same) ---
+  6 | type AccommodationBookingDetails = {
+
+
+
+Import traces:
+  Client Component Browser:
+    ./explorerbackpackers/app/lib/api.ts [Client Component Browser]
+    ./explorerbackpackers/app/checkout/page.tsx [Client Component Browser]
+    ./explorerbackpackers/app/checkout/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./explorerbackpackers/app/lib/api.ts [Client Component SSR]
+    ./explorerbackpackers/app/checkout/page.tsx [Client Component SSR]
+    ./explorerbackpackers/app/checkout/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[04:14:22.304] Server  ERROR    ⨯ ./explorerbackpackers/app/lib/api.ts:3:1
+Module not found: Can't resolve './firebase'
+  1 | import { addDoc, collection } from "firebase/firestore";
+  2 | // UPDATE THIS PATH: Point to wherever you initialized your firebase app
+> 3 | import { db } from "./firebase"; 
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  4 |
+  5 | // --- TYPES (Kept the same) ---
+  6 | type AccommodationBookingDetails = {
+
+
+
+Import traces:
+  Client Component Browser:
+    ./explorerbackpackers/app/lib/api.ts [Client Component Browser]
+    ./explorerbackpackers/app/checkout/page.tsx [Client Component Browser]
+    ./explorerbackpackers/app/checkout/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./explorerbackpackers/app/lib/api.ts [Client Component SSR]
+    ./explorerbackpackers/app/checkout/page.tsx [Client Component SSR]
+    ./explorerbackpackers/app/checkout/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[04:14:22.307] Server  ERROR    ⨯ ./explorerbackpackers/app/lib/api.ts:3:1
+Module not found: Can't resolve './firebase'
+  1 | import { addDoc, collection } from "firebase/firestore";
+  2 | // UPDATE THIS PATH: Point to wherever you initialized your firebase app
+> 3 | import { db } from "./firebase"; 
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  4 |
+  5 | // --- TYPES (Kept the same) ---
+  6 | type AccommodationBookingDetails = {
+
+
+
+Import traces:
+  Client Component Browser:
+    ./explorerbackpackers/app/lib/api.ts [Client Component Browser]
+    ./explorerbackpackers/app/checkout/page.tsx [Client Component Browser]
+    ./explorerbackpackers/app/checkout/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./explorerbackpackers/app/lib/api.ts [Client Component SSR]
+    ./explorerbackpackers/app/checkout/page.tsx [Client Component SSR]
+    ./explorerbackpackers/app/checkout/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[04:14:22.324] Server  ERROR    ⨯ ./explorerbackpackers/app/lib/api.ts:3:1
+Module not found: Can't resolve './firebase'
+  1 | import { addDoc, collection } from "firebase/firestore";
+  2 | // UPDATE THIS PATH: Point to wherever you initialized your firebase app
+> 3 | import { db } from "./firebase"; 
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  4 |
+  5 | // --- TYPES (Kept the same) ---
+  6 | type AccommodationBookingDetails = {
+
+
+
+Import traces:
+  Client Component Browser:
+    ./explorerbackpackers/app/lib/api.ts [Client Component Browser]
+    ./explorerbackpackers/app/book-tour/page.tsx [Client Component Browser]
+    ./explorerbackpackers/app/book-tour/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./explorerbackpackers/app/lib/api.ts [Client Component SSR]
+    ./explorerbackpackers/app/book-tour/page.tsx [Client Component SSR]
+    ./explorerbackpackers/app/book-tour/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[04:14:22.326] Server  ERROR    ⨯ ./explorerbackpackers/app/lib/api.ts:3:1
+Module not found: Can't resolve './firebase'
+  1 | import { addDoc, collection } from "firebase/firestore";
+  2 | // UPDATE THIS PATH: Point to wherever you initialized your firebase app
+> 3 | import { db } from "./firebase"; 
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  4 |
+  5 | // --- TYPES (Kept the same) ---
+  6 | type AccommodationBookingDetails = {
+
+
+
+Import traces:
+  Client Component Browser:
+    ./explorerbackpackers/app/lib/api.ts [Client Component Browser]
+    ./explorerbackpackers/app/book-tour/page.tsx [Client Component Browser]
+    ./explorerbackpackers/app/book-tour/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./explorerbackpackers/app/lib/api.ts [Client Component SSR]
+    ./explorerbackpackers/app/book-tour/page.tsx [Client Component SSR]
+    ./explorerbackpackers/app/book-tour/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[04:14:22.327] Server  ERROR    ⨯ ./explorerbackpackers/app/lib/api.ts:3:1
+Module not found: Can't resolve './firebase'
+  1 | import { addDoc, collection } from "firebase/firestore";
+  2 | // UPDATE THIS PATH: Point to wherever you initialized your firebase app
+> 3 | import { db } from "./firebase"; 
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  4 |
+  5 | // --- TYPES (Kept the same) ---
+  6 | type AccommodationBookingDetails = {
+
+
+
+Import traces:
+  Client Component Browser:
+    ./explorerbackpackers/app/lib/api.ts [Client Component Browser]
+    ./explorerbackpackers/app/book-tour/page.tsx [Client Component Browser]
+    ./explorerbackpackers/app/book-tour/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./explorerbackpackers/app/lib/api.ts [Client Component SSR]
+    ./explorerbackpackers/app/book-tour/page.tsx [Client Component SSR]
+    ./explorerbackpackers/app/book-tour/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[04:14:22.329] Server  ERROR    ⨯ ./explorerbackpackers/app/lib/api.ts:3:1
+Module not found: Can't resolve './firebase'
+  1 | import { addDoc, collection } from "firebase/firestore";
+  2 | // UPDATE THIS PATH: Point to wherever you initialized your firebase app
+> 3 | import { db } from "./firebase"; 
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  4 |
+  5 | // --- TYPES (Kept the same) ---
+  6 | type AccommodationBookingDetails = {
+
+
+
+Import traces:
+  Client Component Browser:
+    ./explorerbackpackers/app/lib/api.ts [Client Component Browser]
+    ./explorerbackpackers/app/book-tour/page.tsx [Client Component Browser]
+    ./explorerbackpackers/app/book-tour/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./explorerbackpackers/app/lib/api.ts [Client Component SSR]
+    ./explorerbackpackers/app/book-tour/page.tsx [Client Component SSR]
+    ./explorerbackpackers/app/book-tour/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[04:14:22.331] Server  ERROR    ⨯ ./explorerbackpackers/app/lib/api.ts:3:1
+Module not found: Can't resolve './firebase'
+  1 | import { addDoc, collection } from "firebase/firestore";
+  2 | // UPDATE THIS PATH: Point to wherever you initialized your firebase app
+> 3 | import { db } from "./firebase"; 
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  4 |
+  5 | // --- TYPES (Kept the same) ---
+  6 | type AccommodationBookingDetails = {
+
+
+
+Import traces:
+  Client Component Browser:
+    ./explorerbackpackers/app/lib/api.ts [Client Component Browser]
+    ./explorerbackpackers/app/book-tour/page.tsx [Client Component Browser]
+    ./explorerbackpackers/app/book-tour/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./explorerbackpackers/app/lib/api.ts [Client Component SSR]
+    ./explorerbackpackers/app/book-tour/page.tsx [Client Component SSR]
+    ./explorerbackpackers/app/book-tour/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[04:14:22.332] Server  ERROR    ⨯ ./explorerbackpackers/app/lib/api.ts:3:1
+Module not found: Can't resolve './firebase'
+  1 | import { addDoc, collection } from "firebase/firestore";
+  2 | // UPDATE THIS PATH: Point to wherever you initialized your firebase app
+> 3 | import { db } from "./firebase"; 
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  4 |
+  5 | // --- TYPES (Kept the same) ---
+  6 | type AccommodationBookingDetails = {
+
+
+
+Import traces:
+  Client Component Browser:
+    ./explorerbackpackers/app/lib/api.ts [Client Component Browser]
+    ./explorerbackpackers/app/book-tour/page.tsx [Client Component Browser]
+    ./explorerbackpackers/app/book-tour/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./explorerbackpackers/app/lib/api.ts [Client Component SSR]
+    ./explorerbackpackers/app/book-tour/page.tsx [Client Component SSR]
+    ./explorerbackpackers/app/book-tour/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[04:14:22.334] Server  ERROR    ⨯ ./explorerbackpackers/app/lib/api.ts:3:1
+Module not found: Can't resolve './firebase'
+  1 | import { addDoc, collection } from "firebase/firestore";
+  2 | // UPDATE THIS PATH: Point to wherever you initialized your firebase app
+> 3 | import { db } from "./firebase"; 
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  4 |
+  5 | // --- TYPES (Kept the same) ---
+  6 | type AccommodationBookingDetails = {
+
+
+
+Import traces:
+  Client Component Browser:
+    ./explorerbackpackers/app/lib/api.ts [Client Component Browser]
+    ./explorerbackpackers/app/book-tour/page.tsx [Client Component Browser]
+    ./explorerbackpackers/app/book-tour/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./explorerbackpackers/app/lib/api.ts [Client Component SSR]
+    ./explorerbackpackers/app/book-tour/page.tsx [Client Component SSR]
+    ./explorerbackpackers/app/book-tour/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[04:14:22.335] Server  ERROR    ⨯ ./explorerbackpackers/app/lib/api.ts:3:1
+Module not found: Can't resolve './firebase'
+  1 | import { addDoc, collection } from "firebase/firestore";
+  2 | // UPDATE THIS PATH: Point to wherever you initialized your firebase app
+> 3 | import { db } from "./firebase"; 
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  4 |
+  5 | // --- TYPES (Kept the same) ---
+  6 | type AccommodationBookingDetails = {
+
+
+
+Import traces:
+  Client Component Browser:
+    ./explorerbackpackers/app/lib/api.ts [Client Component Browser]
+    ./explorerbackpackers/app/book-tour/page.tsx [Client Component Browser]
+    ./explorerbackpackers/app/book-tour/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./explorerbackpackers/app/lib/api.ts [Client Component SSR]
+    ./explorerbackpackers/app/book-tour/page.tsx [Client Component SSR]
+    ./explorerbackpackers/app/book-tour/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[04:14:22.340] Server  LOG      ✓ Compiled in 2.2s
+[04:14:23.574] Browser ERROR   ./explorerbackpackers/app/lib/api.ts:3:1
+Module not found: Can't resolve './firebase'
+  1 | import { addDoc, collection } from "firebase/firestore";
+  2 | // UPDATE THIS PATH: Point to wherever you initialized your firebase app
+> 3 | import { db } from "./firebase"; 
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  4 |
+  5 | // --- TYPES (Kept the same) ---
+  6 | type AccommodationBookingDetails = {
+
+Import traces:
+  Client Component Browser:
+    ./explorerbackpackers/app/lib/api.ts [Client Component Browser]
+    ./explorerbackpackers/app/book/page.tsx [Client Component Browser]
+    ./explorerbackpackers/app/book/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./explorerbackpackers/app/lib/api.ts [Client Component SSR]
+    ./explorerbackpackers/app/book/page.tsx [Client Component SSR]
+    ./explorerbackpackers/app/book/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+[04:14:28.765] Browser ERROR   ./explorerbackpackers/app/lib/api.ts:3:1
+Module not found: Can't resolve './firebase'
+  1 | import { addDoc, collection } from "firebase/firestore";
+  2 | // UPDATE THIS PATH: Point to wherever you initialized your firebase app
+> 3 | import { db } from "./firebase"; 
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  4 |
+  5 | // --- TYPES (Kept the same) ---
+  6 | type AccommodationBookingDetails = {
+
+Import traces:
+  Client Component Browser:
+    ./explorerbackpackers/app/lib/api.ts [Client Component Browser]
+    ./explorerbackpackers/app/book/page.tsx [Client Component Browser]
+    ./explorerbackpackers/app/book/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./explorerbackpackers/app/lib/api.ts [Client Component SSR]
+    ./explorerbackpackers/app/book/page.tsx [Client Component SSR]
+    ./explorerbackpackers/app/book/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+[04:15:12.691] Server  LOG      ✓ Compiled in 489ms
+[04:15:14.571] Browser WARN    As of March 1st, 2025, google.maps.places.Autocomplete is not available to new customers. Please use google.maps.places.PlaceAutocompleteElement instead. At this time, google.maps.places.Autocomplete is not scheduled to be discontinued, but google.maps.places.PlaceAutocompleteElement is recommended over google.maps.places.Autocomplete. While google.maps.places.Autocomplete will continue to receive bug fixes for any major regressions, existing bugs in google.maps.places.Autocomplete will not be addressed. At least 12 months notice will be given before support is discontinued. Please see https://developers.google.com/maps/legacy for additional details and https://developers.google.com/maps/documentation/javascript/places-migration-overview for the migration guide.
+[04:15:14.571] Browser WARN    As of March 1st, 2025, google.maps.places.Autocomplete is not available to new customers. Please use google.maps.places.PlaceAutocompleteElement instead. At this time, google.maps.places.Autocomplete is not scheduled to be discontinued, but google.maps.places.PlaceAutocompleteElement is recommended over google.maps.places.Autocomplete. While google.maps.places.Autocomplete will continue to receive bug fixes for any major regressions, existing bugs in google.maps.places.Autocomplete will not be addressed. At least 12 months notice will be given before support is discontinued. Please see https://developers.google.com/maps/legacy for additional details and https://developers.google.com/maps/documentation/javascript/places-migration-overview for the migration guide.
+[04:19:58.645] Server  LOG      ✓ Compiled in 366ms
+[04:19:59.880] Browser ERROR   [2025-12-07T16:52:09.327Z]  @firebase/analytics: {"code":"analytics/config-fetch-failed","customData":{"httpStatus":400,"responseMessage":"API key not valid. Please pass a valid API key."},"name":"FirebaseError"}
+[04:19:59.881] Browser ERROR   unhandledRejection: FirebaseError: Analytics: Dynamic config fetch failed: [400] API key not valid. Please pass a valid API key. (analytics/config-fetch-failed).
+[04:19:59.881] Browser ERROR   {"code":"installations/request-failed","customData":{"requestName":"Create Installation","serverCode":400,"serverMessage":"API key not valid. Please pass a valid API key.","serverStatus":"INVALID_ARGUMENT"},"name":"FirebaseError"}
+[04:20:00.564] Browser WARN    As of March 1st, 2025, google.maps.places.Autocomplete is not available to new customers. Please use google.maps.places.PlaceAutocompleteElement instead. At this time, google.maps.places.Autocomplete is not scheduled to be discontinued, but google.maps.places.PlaceAutocompleteElement is recommended over google.maps.places.Autocomplete. While google.maps.places.Autocomplete will continue to receive bug fixes for any major regressions, existing bugs in google.maps.places.Autocomplete will not be addressed. At least 12 months notice will be given before support is discontinued. Please see https://developers.google.com/maps/legacy for additional details and https://developers.google.com/maps/documentation/javascript/places-migration-overview for the migration guide.
+[04:20:00.564] Browser ERROR   [2025-12-07T16:52:09.074Z]  @firebase/analytics: {"code":"analytics/config-fetch-failed","customData":{"httpStatus":400,"responseMessage":"API key not valid. Please pass a valid API key."},"name":"FirebaseError"}
+[04:20:00.564] Browser ERROR   unhandledRejection: FirebaseError: Analytics: Dynamic config fetch failed: [400] API key not valid. Please pass a valid API key. (analytics/config-fetch-failed).
+[04:20:00.564] Browser ERROR   {"code":"installations/request-failed","customData":{"requestName":"Create Installation","serverCode":400,"serverMessage":"API key not valid. Please pass a valid API key.","serverStatus":"INVALID_ARGUMENT"},"name":"FirebaseError"}
+[04:22:12.163] Server  LOG      ✓ Compiled in 255ms
+[04:22:12.563] Browser WARN    As of March 1st, 2025, google.maps.places.Autocomplete is not available to new customers. Please use google.maps.places.PlaceAutocompleteElement instead. At this time, google.maps.places.Autocomplete is not scheduled to be discontinued, but google.maps.places.PlaceAutocompleteElement is recommended over google.maps.places.Autocomplete. While google.maps.places.Autocomplete will continue to receive bug fixes for any major regressions, existing bugs in google.maps.places.Autocomplete will not be addressed. At least 12 months notice will be given before support is discontinued. Please see https://developers.google.com/maps/legacy for additional details and https://developers.google.com/maps/documentation/javascript/places-migration-overview for the migration guide.

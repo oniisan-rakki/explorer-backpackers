@@ -1,0 +1,57 @@
+[debug] [2025-12-08T08:28:07.242Z] ----------------------------------------------------------------------
+[debug] [2025-12-08T08:28:07.248Z] Command:       /Users/bangers/.nvm/versions/node/v20.18.0/bin/node /Users/bangers/.nvm/versions/node/v20.18.0/bin/firebase init hosting
+[debug] [2025-12-08T08:28:07.248Z] CLI Version:   14.27.0
+[debug] [2025-12-08T08:28:07.248Z] Platform:      darwin
+[debug] [2025-12-08T08:28:07.249Z] Node Version:  v20.18.0
+[debug] [2025-12-08T08:28:07.249Z] Time:          Mon Dec 08 2025 10:28:07 GMT+0200 (South Africa Standard Time)
+[debug] [2025-12-08T08:28:07.249Z] ----------------------------------------------------------------------
+[debug] 
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  /Users/bangers/explorerbackpackers
+
+Before we get started, keep in mind:
+
+  * You are initializing within an existing Firebase project directory
+
+[info] 
+=== Project Setup
+[info] 
+[info] First, let's associate this project directory with a Firebase project.
+[info] You can create multiple project aliases by running firebase use --add, 
+[info] 
+[debug] [2025-12-08T08:28:07.408Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2025-12-08T08:28:07.409Z] > authorizing via signed-in user (bookings@explorerbackpackers.com)
+[debug] [2025-12-08T08:28:07.409Z] Checked if tokens are valid: true, expires at: 1765184791104
+[debug] [2025-12-08T08:28:07.409Z] Checked if tokens are valid: true, expires at: 1765184791104
+[debug] [2025-12-08T08:28:07.410Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/explorer-backpackers [none]
+[debug] [2025-12-08T08:28:08.572Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/explorer-backpackers 200
+[debug] [2025-12-08T08:28:08.573Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/explorer-backpackers {"projectId":"explorer-backpackers","projectNumber":"703947792476","displayName":"Explorer Backpackers","name":"projects/explorer-backpackers","resources":{"hostingSite":"explorer-backpackers","realtimeDatabaseInstance":"explorer-backpackers-default-rtdb"},"state":"ACTIVE","etag":"1_3a8f4c68-9839-44d5-996d-73c602ca2aa7"}
+[info] i  Using project explorer-backpackers (Explorer Backpackers) . 
+[info] 
+=== Hosting Setup
+[debug] [2025-12-08T08:28:08.589Z] Checked if tokens are valid: true, expires at: 1765184791104
+[debug] [2025-12-08T08:28:08.589Z] Checked if tokens are valid: true, expires at: 1765184791104
+[debug] [2025-12-08T08:28:08.589Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/explorer-backpackers [none]
+[debug] [2025-12-08T08:28:09.133Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/explorer-backpackers 200
+[debug] [2025-12-08T08:28:09.133Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/explorer-backpackers {"projectId":"explorer-backpackers","projectNumber":"703947792476","displayName":"Explorer Backpackers","name":"projects/explorer-backpackers","resources":{"hostingSite":"explorer-backpackers","realtimeDatabaseInstance":"explorer-backpackers-default-rtdb"},"state":"ACTIVE","etag":"1_3a8f4c68-9839-44d5-996d-73c602ca2aa7"}
+[debug] [2025-12-08T08:36:38.288Z] ExitPromptError: User force closed the prompt with SIGINT
+    at Interface.sigint (/Users/bangers/.nvm/versions/node/v20.18.0/lib/node_modules/firebase-tools/node_modules/@inquirer/core/dist/commonjs/lib/create-prompt.js:101:37)
+    at Interface.emit (node:events:519:28)
+    at Interface.emit (node:domain:488:12)
+    at [_ttyWrite] [as _ttyWrite] (node:internal/readline/interface:1126:18)
+    at ReadStream.onkeypress (node:internal/readline/interface:265:20)
+    at ReadStream.emit (node:events:531:35)
+    at ReadStream.emit (node:domain:488:12)
+    at emitKeys (node:internal/readline/utils:371:14)
+    at emitKeys.next (<anonymous>)
+    at ReadStream.onData (node:internal/readline/emitKeypressEvents:64:36)
+[error] 
+[error] Error: An unexpected error has occurred.

@@ -1,0 +1,9 @@
+export const testimonialsData = [
+  { quote: "This is a really good place to stay if you are on a budget or if you want to meet with like-minded people. Friendly and knowledgeable hosts. Clean, comfortable beds and rooms, hot showers and more", author: "John Dovey, South Africa" },
+  { quote: "It felt like home. The staff is super friendly and helpful. I loved the place its a great mix of a quiet place to get some work done and to go out in the evening or to venture out to other places in Joburg. Will definetely come back! Also the Breakfast was amazing!", author: "Marlous Wilhelmi, Germany" },
+  { quote: "One of the best back packers if not the best in Joburg! Perfectly located. Ideal for the simple traveler who is looking for value. Also great for travelling young professional.", author: "Nomisupasta Media, South Africa" },
+  { quote: "Just the perfect stay that I could hope for in Johannesburg! Beautiful and safe area, clean accommodation and awesome host! Would love to come back some day.", author: "Anonymous" },
+  { quote: "Awesome spot right in a nice neighborhood of Joburg called Parkhurst. The rooms are super clean and furnished in a modern way, the common area is inviting and a heater can be turned on when it's chilly. The staff was very friendly and knowledgeable. Highly recommend!", author: "DDA Browiecki, United States" },
+  { quote: "The staff was amazing! Such great community vibes. Beds super comfortable and LOVED the huge living room. Felt very homey and cozy. Location is perfect as well!", author: "Laurence, Canada" },
+  { quote: "I loved the place. Staff and managers are kind, helpful. It looks exactly like the photos. Quiet. Drawers are good, so you can put everything in it.", author: "Ebru, Turkey" },
+];
