@@ -6,22 +6,21 @@
  */
 
 // 1. YOCO KEYS
-// Used to CREATE the checkout. (Your Live Key)
-const YOCO_API_SECRET = "sk_test_a4ce465834nOlMb6b1c4aca99bb2";
+// Used to CREATE the checkout.
+const YOCO_API_SECRET = "sk_live_a4bd571834nOlMb72d14df3949a6";
 
-// Used to VERIFY the webhook. (Your Webhook Secret)
+// Used to VERIFY the webhook.
 const YOCO_WEBHOOK_SECRET = "whsec_MzQ3RjU4RjQxRTRFNTgzNjM4NkU3NkM2NUVFMTZFNDA="; 
 
 // 2. CLOUDBEDS KEYS
-// Ensure this is your NEW, working token
-const CLOUDBEDS_API_KEY = "cbat_bYbsaXpWiURi1tETuHp3uK0DK9wY1GDo"; 
+// Using the "Old" key that we confirmed works
+const CLOUDBEDS_API_KEY = "cbat_snnODSWKVGhc3bWDfcCGbfZ7Y4dB7IqU"; 
 
 // 3. EMAIL SETTINGS (GMAIL)
 const EMAIL_USER = "bookings@explorerbackpackers.com"; 
-const EMAIL_PASS = "Kanimambo2024"; 
+const EMAIL_PASS = "Kanimambo2024"; // This will fail, but we will catch the error now.
 
 // 4. SITE URL (For Redirects)
-// Change this to 'https://explorerbackpackers.com' when you go live!
 const SITE_URL = "https://thandeka--explorer-backpackers.us-central1.hosted.app";
 
 /**
@@ -108,7 +107,6 @@ async function sendConfirmationEmail(to, subject, text, attachments) {
   });
 }
 
-// --- FIX: Added guestCountry and guestPhone to ensure Cloudbeds accepts the booking ---
 async function createCloudbedsReservation(bookingData) {
   const cloudbedsUrl = "https://api.cloudbeds.com/api/v1.2/postReservation";
   const params = new URLSearchParams();
@@ -118,10 +116,9 @@ async function createCloudbedsReservation(bookingData) {
   params.append("guestFirstName", bookingData.firstName);
   params.append("guestLastName", bookingData.lastName);
   params.append("guestEmail", bookingData.email);
-  params.append("guestCountry", bookingData.country || 'ZA'); // Required by many Cloudbeds setups
-  params.append("guestPhone", bookingData.phone || '');       // Highly recommended
+  params.append("guestCountry", bookingData.country || 'ZA'); 
+  params.append("guestPhone", bookingData.phone || '');       
   
-  // Note: 'rooms' must be a JSON string inside the form param
   params.append("rooms", JSON.stringify([{ roomTypeID: bookingData.roomTypeId, quantity: 1 }]));
   params.append("adults", bookingData.numberOfGuests || bookingData.guests || 1);
   params.append("status", "confirmed");
@@ -132,7 +129,6 @@ async function createCloudbedsReservation(bookingData) {
     });
     return response.data;
   } catch (error) {
-    // Log the actual error response from Cloudbeds for debugging
     console.error("Cloudbeds API Error Details:", error.response?.data || error.message);
     throw error;
   }
@@ -169,7 +165,6 @@ exports.processYocoPayment = onRequest({ cors: true }, async (req, res) => {
       return res.status(400).send("Missing parameters: amount, bookingId, or bookingType.");
     }
 
-    // Redirect the user to the Thank You page (which will wait for the webhook)
     const successUrl = `${SITE_URL}/thankyou?bookingId=${bookingId}&bookingType=${bookingType}`;
 
     const response = await axios.post(
@@ -177,7 +172,7 @@ exports.processYocoPayment = onRequest({ cors: true }, async (req, res) => {
       {
         amount: amount * 100, // Cents
         currency: currency,
-        successUrl: successUrl, // Yoco redirects here after payment
+        successUrl: successUrl,
         metadata: { bookingId, bookingType }, 
       },
       {
@@ -195,7 +190,7 @@ exports.processYocoPayment = onRequest({ cors: true }, async (req, res) => {
   }
 });
 
-// 3. Yoco Webhook (Verified & Secure)
+// 3. Yoco Webhook
 exports.yocoWebhook = onRequest(async (req, res) => {
   const rawBody = req.rawBody ? req.rawBody.toString() : JSON.stringify(req.body);
 
@@ -269,15 +264,24 @@ exports.yocoWebhook = onRequest(async (req, res) => {
         }
       }
 
-      // C. Generate PDF & Email
-      const isTour = bookingType === "tour";
-      const emailSubject = isTour ? `Tour Confirmed: ${data.itemName || data.tourName}` : `Stay Confirmed: ${data.roomName}`;
-      const emailText = `Hi ${data.firstName},\n\nYour booking is confirmed! Details attached.\n\nExplorer Backpackers`;
-      
-      const pdfBytes = await generateInvoicePDF(data, bookingType);
-      await sendConfirmationEmail(data.email, emailSubject, emailText, [
-        { filename: "Invoice.pdf", content: Buffer.from(pdfBytes), contentType: "application/pdf" }
-      ]);
+      // C. Generate PDF & Email (CRITICAL FIX: WRAPPED IN TRY/CATCH)
+      // This ensures that if email fails (due to auth), the DB update below STILL happens.
+      try {
+        const isTour = bookingType === "tour";
+        const emailSubject = isTour ? `Tour Confirmed: ${data.itemName || data.tourName}` : `Stay Confirmed: ${data.roomName}`;
+        const emailText = `Hi ${data.firstName},\n\nYour booking is confirmed! Details attached.\n\nExplorer Backpackers`;
+        
+        const pdfBytes = await generateInvoicePDF(data, bookingType);
+        
+        await sendConfirmationEmail(data.email, emailSubject, emailText, [
+          { filename: "Invoice.pdf", content: Buffer.from(pdfBytes), contentType: "application/pdf" }
+        ]);
+        console.log("Email sent successfully.");
+      } catch (emailError) {
+        // We catch the error and log it, but we do NOT throw it further.
+        // This allows the code to proceed to "Step D".
+        console.error("EMAIL FAILED (Ignored to allow DB update):", emailError.message);
+      }
 
       // D. Update Database (This triggers the Thank You Page success state)
       await docRef.update({
