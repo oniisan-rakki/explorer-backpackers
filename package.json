@@ -14,6 +14,14 @@
     "react-dom": "latest",
     "firebase": "^10.0.0"
   },
+  "devDependencies": {
+    "typescript": "^5.0.0",
+    "@types/node": "^20.0.0",
+    "@types/react": "^18.0.0",
+    "@types/react-dom": "^18.0.0",
+    "eslint": "^9.0.0",
+    "eslint-config-next": "latest"
+  },
   "engines": {
     "node": "20"
   }
