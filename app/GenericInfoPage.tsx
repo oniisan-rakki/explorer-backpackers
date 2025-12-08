@@ -1,7 +1,7 @@
 "use client";
 import React from 'react';
-import { PageTitle } from '../components/PageTitle';
-import { HeroSection } from '../components/HeroSection'; // This component is used here
+import { PageTitle } from './components/PageTitle';
+import { HeroSection } from './components/HeroSection'; // This component is used here
 
 // --- NEW: Define the types for the component's props ---
 type GenericInfoPageProps = {
