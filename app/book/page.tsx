@@ -103,10 +103,15 @@ export default function BookingPage() {
     }
 
     try {
-      const data = await checkRoomAvailability(search.checkIn, search.checkOut, search.guests, search.promoCode);
+      const response = await checkRoomAvailability(search.checkIn, search.checkOut, search.guests, search.promoCode);
+      
+      // --- FIX: Extract 'propertyRooms' from the nested API response ---
+      const rooms = response.data && response.data[0] ? response.data[0].propertyRooms : [];
+
       const availabilityMap: AvailabilityMap = {};
-      if (Array.isArray(data)) {
-        data.forEach((room: any) => {
+      if (Array.isArray(rooms)) {
+        rooms.forEach((room: any) => {
+          // Map using roomTypeID to match your local data IDs
           availabilityMap[room.roomTypeID.toString()] = { 
             rate: room.roomRate,
             available: room.roomsAvailable,
@@ -115,6 +120,7 @@ export default function BookingPage() {
         });
       }
       setAvailability(availabilityMap);
+
     } catch (err) {
       setError('Failed to fetch room availability. Please try again.');
       console.error(err);
@@ -139,7 +145,7 @@ export default function BookingPage() {
     }
   };
 
-  // --- Helper Components (Kept inside to access state/handlers) ---
+  // --- Helper Components ---
 
   const RoomRateOptions = ({ room, availability, searchParams }: RoomRateOptionsProps) => {
     const availabilityInfo = availability ? availability[room.roomTypeId] : null;
@@ -303,7 +309,6 @@ export default function BookingPage() {
       <header className="bg-white shadow-md py-4 px-5 sticky top-0 z-40">
         <div className="container mx-auto">
           <div className="flex justify-between items-center mb-4">
-            {/* Replaced button/navigateTo with Link */}
             <Link href="/" className="flex items-center text-gray-700 hover:text-green-600 inline-flex">
               <img src={images.iconBack} alt="Back" className="h-4 w-4 mr-2" /> Back
             </Link>
