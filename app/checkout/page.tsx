@@ -67,23 +67,32 @@ function CheckoutContent() {
     setGuestDetails(prev => ({ ...prev, [name]: value }));
   };
 
-  const handlePaymentSubmit = async (e: React.FormEvent) => {
+const handlePaymentSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsProcessing(true);
     setError(null);
 
+    // FIX: Remove 'R' and spaces to ensure we get a valid number
+    const cleanCostString = bookingDetails.totalCost.toString().replace(/[^0-9.]/g, '');
+    const numericCost = parseFloat(cleanCostString);
+
+    if (isNaN(numericCost)) {
+      setError("Invalid price detected. Please return to the previous page and try again.");
+      setIsProcessing(false);
+      return;
+    }
+
     const fullBookingDetails = {
       ...bookingDetails,
       ...guestDetails,
-      // Ensure totalCost is a number for the API function
-      totalCost: parseFloat(bookingDetails.totalCost),
-      numberOfGuests: bookingDetails.guests, // Add missing field for API
+      totalCost: numericCost, // Send the clean numeric value
+      numberOfGuests: bookingDetails.guests, 
     };
     
     try {
       const yocoUrl = await processYocoPayment(fullBookingDetails);
       if (yocoUrl) {
-        window.location.href = yocoUrl; // Redirect to Yoco
+        window.location.href = yocoUrl; 
       } else {
         throw new Error("Did not receive a Yoco URL.");
       }

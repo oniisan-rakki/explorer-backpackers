@@ -19,6 +19,15 @@ type TourBookingData = {
   selectedTier?: any;
 };
 
+// --- Helper to safely parse price strings (e.g. "R 2000" -> 2000) ---
+const parsePrice = (priceStr: string | null) => {
+  if (!priceStr) return 0;
+  // Remove anything that is NOT a digit or a dot
+  const cleanStr = priceStr.toString().replace(/[^0-9.]/g, '');
+  const num = parseFloat(cleanStr);
+  return isNaN(num) ? 0 : num;
+};
+
 function TourBookingContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -32,7 +41,8 @@ function TourBookingContent() {
     tour: tour,
     date: searchParams.get('date') || '',
     guests: parseInt(searchParams.get('guests') || '1', 10),
-    totalPrice: parseFloat(searchParams.get('totalPrice') || '0'),
+    // FIX: Use the helper function to sanitize the price string
+    totalPrice: parsePrice(searchParams.get('totalPrice')), 
     selectedTier: searchParams.get('tier') ? { type: searchParams.get('tier') } : undefined
   } : null;
 
