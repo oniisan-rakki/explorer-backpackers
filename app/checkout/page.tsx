@@ -17,7 +17,7 @@ type BookingDetails = {
   guests: number;
   checkIn: string;
   checkOut: string;
-  totalCost: string; 
+  amount: string; // We map 'totalCost' from URL to this 'amount' field
   discount: string;
   nights: number;
 };
@@ -34,7 +34,8 @@ function CheckoutContent() {
     guests: parseInt(searchParams.get('guests') || '0', 10),
     checkIn: searchParams.get('checkIn')!,
     checkOut: searchParams.get('checkOut')!,
-    totalCost: searchParams.get('totalCost')!,
+    // Map the URL param 'totalCost' to the object key 'amount'
+    amount: searchParams.get('totalCost')!, 
     discount: searchParams.get('discount') || '',
     nights: parseInt(searchParams.get('nights') || '0', 10),
   } : null;
@@ -67,13 +68,13 @@ function CheckoutContent() {
     setGuestDetails(prev => ({ ...prev, [name]: value }));
   };
 
-const handlePaymentSubmit = async (e: React.FormEvent) => {
+  const handlePaymentSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsProcessing(true);
     setError(null);
 
     // FIX: Remove 'R' and spaces to ensure we get a valid number
-    const cleanCostString = bookingDetails.totalCost.toString().replace(/[^0-9.]/g, '');
+    const cleanCostString = bookingDetails.amount.toString().replace(/[^0-9.]/g, '');
     const numericCost = parseFloat(cleanCostString);
 
     if (isNaN(numericCost)) {
@@ -82,10 +83,12 @@ const handlePaymentSubmit = async (e: React.FormEvent) => {
       return;
     }
 
+    // --- CRITICAL FIX ---
+    // We send 'amount' as a pure Number, not a string
     const fullBookingDetails = {
       ...bookingDetails,
       ...guestDetails,
-      totalCost: numericCost, // Send the clean numeric value
+      amount: numericCost, 
       numberOfGuests: bookingDetails.guests, 
     };
     
@@ -110,15 +113,12 @@ const handlePaymentSubmit = async (e: React.FormEvent) => {
         <div className="container mx-auto max-w-6xl">
           {/* Header Content: Inline Flex with Centered Logo */}
           <div className="flex justify-between items-center mb-4">
-            {/* Replaced button/navigateTo with Link */}
             <Link href="/book" className="flex items-center text-gray-700 hover:text-green-600 inline-flex">
               <img src={images.iconBack} alt="Back" className="h-4 w-4 mr-2" /> Back to Rooms
             </Link>
             
-            {/* Logo with h-15 as requested */}
             <img src={images.logo} alt="Logo" className="h-15" />
             
-            {/* Spacer to balance the 'Back to Rooms' button width for centering */}
             <div className="w-32"></div> 
           </div>
           
@@ -150,7 +150,8 @@ const handlePaymentSubmit = async (e: React.FormEvent) => {
               <FormInput label="Arrival" name="checkIn" value={bookingDetails.checkIn} readOnly />
               <FormInput label="Departure" name="checkOut" value={bookingDetails.checkOut} readOnly />
               <FormInput label="Discount" name="discount" value={bookingDetails.discount} readOnly />
-              <FormInput label="Total" name="totalCost" value={`R${bookingDetails.totalCost}`} readOnly />
+              {/* Note: Changed bookingDetails.totalCost to bookingDetails.amount below to match the Type definition */}
+              <FormInput label="Total" name="totalCost" value={`R${bookingDetails.amount}`} readOnly />
             </div>
           </div>
           
@@ -380,7 +381,8 @@ const handlePaymentSubmit = async (e: React.FormEvent) => {
               
               <div className="mt-8">
                 <Button type="submit" disabled={isProcessing} className="w-full text-sm">
-                  {isProcessing ? 'Processing...' : `Pay Now R${bookingDetails.totalCost}`}
+                  {/* Note: Changed bookingDetails.totalCost to bookingDetails.amount below to match the Type definition */}
+                  {isProcessing ? 'Processing...' : `Pay Now R${bookingDetails.amount}`}
                 </Button>
                 {error && <p className="text-red-500 text-center mt-4">{error}</p>}
               </div>

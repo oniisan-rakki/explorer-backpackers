@@ -161,8 +161,10 @@ function TourBookingContent() {
          return;
     }
 
+    // --- CRITICAL FIX FOR PAYMENT ---
+    // Mapping 'totalPrice' to 'amount' so the API receives the correct parameter
     const fullTourBookingDetails = {
-      totalCost: totalPrice,
+      amount: totalPrice, 
       firstName: guestDetails['First Name'],
       lastName: guestDetails['Last Name'],
       email: guestDetails['Email'],
