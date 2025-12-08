@@ -1,10 +1,10 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import { getTourById, calculateTourPrice, getInitialDates } from '../lib/utils';
-import { PageTitle } from '../components/PageTitle';
+import { getTourById, calculateTourPrice, getInitialDates } from './lib/utils';
+import { PageTitle } from './components/PageTitle';
 // FormInput and FormSelect removed to use raw HTML for consistent styling
-import { Button } from '../components/Button';
-import { images } from '../data/images';
+import { Button } from './components/Button';
+import { images } from './data/images';
 
 type TourDetailsPageProps = {
   navigateTo: (page: string, props?: any) => void;
