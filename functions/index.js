@@ -6,22 +6,18 @@
  */
 
 // 1. YOCO KEYS
-// Used to CREATE the checkout.
-const YOCO_API_SECRET = "sk_live_a4bd571834nOlMb72d14df3949a6";
-
-// Used to VERIFY the webhook.
-const YOCO_WEBHOOK_SECRET = "whsec_MzQ3RjU4RjQxRTRFNTgzNjM4NkU3NkM2NUVFMTZFNDA="; 
+const YOCO_API_SECRET = process.env.YOCO_API_SECRET;
+const YOCO_WEBHOOK_SECRET = process.env.YOCO_WEBHOOK_SECRET;
 
 // 2. CLOUDBEDS KEYS
-// Using the "Old" key that we confirmed works
-const CLOUDBEDS_API_KEY = "cbat_snnODSWKVGhc3bWDfcCGbfZ7Y4dB7IqU"; 
+const CLOUDBEDS_API_KEY = process.env.CLOUDBEDS_API_KEY;
 
-// 3. EMAIL SETTINGS (GMAIL)
-const EMAIL_USER = "bookings@explorerbackpackers.com"; 
-const EMAIL_PASS = "Kanimambo2024"; // This will fail, but we will catch the error now.
+// 3. EMAIL SETTINGS
+const EMAIL_USER = process.env.EMAIL_USER;
+const EMAIL_PASS = process.env.EMAIL_PASS;
 
-// 4. SITE URL (For Redirects)
-const SITE_URL = "https://thandeka--explorer-backpackers.us-central1.hosted.app";
+// 4. SITE URL
+const SITE_URL = process.env.SITE_URL;
 
 /**
  * ==================================================================
