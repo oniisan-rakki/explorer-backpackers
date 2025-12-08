@@ -1,10 +1,10 @@
 "use client";
 import React, { useState, useEffect, useMemo } from 'react';
-import { PageTitle } from '../components/PageTitle';
-import { HeroSection } from '../components/HeroSection';
-import { TourCard } from '../components/TourCard';
-import { PaginationControls } from '../components/PaginationControls';
-import { allExperiences, getHeroImageForCategory } from '../lib/utils';
+import { PageTitle } from './components/PageTitle';
+import { HeroSection } from './components/HeroSection';
+import { TourCard } from './components/TourCard';
+import { PaginationControls } from './components/PaginationControls';
+import { allExperiences, getHeroImageForCategory } from './lib/utils';
 
 type TourCategoryPageProps = {
   navigateTo: (page: string, props?: any) => void;
