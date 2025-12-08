@@ -1,11 +1,11 @@
 "use client";
 import React, { useState, useEffect, useRef } from 'react';
-import { PageTitle } from '../components/PageTitle';
-import { Button } from '../components/Button';
-import { FormInput } from '../components/FormInput';
-import { FormTextarea } from '../components/FormTextarea';
-import { images } from '../data/images';
-import { processYocoTourPayment } from '../lib/api';
+import { PageTitle } from './components/PageTitle';
+import { Button } from './components/Button';
+import { FormInput } from './components/FormInput';
+import { FormTextarea } from './components/FormTextarea';
+import { images } from './data/images';
+import { processYocoTourPayment } from './lib/api';
 
 type TourBookingData = {
   tour: any;
