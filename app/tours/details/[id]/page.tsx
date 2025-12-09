@@ -16,8 +16,18 @@ export default function TourDetailsPage({ params }: { params: Promise<{ id: stri
   
   const tour = tourId ? getTourById(tourId) : undefined;
   
+  // --- DATE LOGIC START: Calculate "Tomorrow" ---
+  const getTomorrow = () => {
+    const date = new Date();
+    date.setDate(date.getDate() + 1); // Add 1 day
+    return date.toISOString().split('T')[0];
+  };
+
+  const minDate = getTomorrow();
+  // --- DATE LOGIC END ---
+
   const [currentImage, setCurrentImage] = useState(0);
-  const [bookingDate, setBookingDate] = useState(getInitialDates().checkIn);
+  const [bookingDate, setBookingDate] = useState(minDate); // Default to tomorrow
   const [guestCount, setGuestCount] = useState(1);
   const [selectedTier, setSelectedTier] = useState<any>(null);
   const [totalPrice, setTotalPrice] = useState(0);
@@ -63,7 +73,6 @@ export default function TourDetailsPage({ params }: { params: Promise<{ id: stri
   const handleBookingSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Construct Query Params
     const query = new URLSearchParams({
         tourId: tour.id,
         date: bookingDate,
@@ -72,7 +81,6 @@ export default function TourDetailsPage({ params }: { params: Promise<{ id: stri
         tier: selectedTier ? selectedTier.type : ''
     }).toString();
     
-    // --- FIX: Ensure this matches the folder name 'app/book-tour' ---
     router.push(`/book-tour?${query}`);
   };
 
@@ -143,10 +151,20 @@ export default function TourDetailsPage({ params }: { params: Promise<{ id: stri
               <div className="sticky top-24 bg-white rounded-lg shadow-lg p-6">
                 <h3 className="text-2xl font-bold text-gray-800 mb-4">Book Your Tour</h3>
                 <form onSubmit={handleBookingSubmit}>
+                  
+                  {/* UPDATED DATE PICKER */}
                   <div className="mb-4">
                     <label className="block text-sm font-medium text-gray-700 mb-1">Date</label>
-                    <input type="date" value={bookingDate} onChange={(e) => setBookingDate(e.target.value)} min={getInitialDates().checkIn} required className="w-full px-4 py-2 border rounded-md h-12" />
+                    <input 
+                      type="date" 
+                      value={bookingDate} 
+                      onChange={(e) => setBookingDate(e.target.value)} 
+                      min={minDate} 
+                      required 
+                      className="w-full px-4 py-2 border rounded-md h-12" 
+                    />
                   </div>
+
                   <div className="mb-4">
                     <label className="block text-sm font-medium text-gray-700 mb-1">Travelers</label>
                     <select value={guestCount} onChange={(e) => setGuestCount(parseInt(e.target.value))} className="w-full px-4 py-2 border rounded-md h-12 bg-white">

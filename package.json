@@ -9,21 +9,21 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@tailwindcss/postcss": "latest",
+    "firebase": "^10.0.0",
     "next": "latest",
+    "postcss": "latest",
     "react": "latest",
     "react-dom": "latest",
-    "firebase": "^10.0.0",
-    "tailwindcss": "latest",
-    "postcss": "latest",
-    "@tailwindcss/postcss": "latest"
+    "tailwindcss": "latest"
   },
   "devDependencies": {
-    "typescript": "^5.0.0",
     "@types/node": "^20.0.0",
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.0.0",
     "eslint": "^9.0.0",
-    "eslint-config-next": "latest"
+    "eslint-config-next": "latest",
+    "typescript": "^5.0.0"
   },
   "engines": {
     "node": "20"

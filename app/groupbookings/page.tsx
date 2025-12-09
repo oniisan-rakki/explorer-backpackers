@@ -27,7 +27,7 @@ export default function GroupBookingsPage() {
   const [result, setResult] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  // 1. Get today's date in YYYY-MM-DD format to restrict past dates
+  // --- DATE LOGIC: Get today's date for validation ---
   const today = new Date().toISOString().split('T')[0];
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -58,7 +58,7 @@ export default function GroupBookingsPage() {
       return;
     }
 
-    // 3. Calculation: Nights (Required for invoice logic)
+    // 3. Calculation: Nights
     const d1 = new Date(formData['Check In']);
     const d2 = new Date(formData['Check Out']);
     
@@ -70,12 +70,10 @@ export default function GroupBookingsPage() {
     const diffTime = Math.abs(d2.getTime() - d1.getTime());
     const nights = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
 
-    // --- UPDATED LOADING TEXT ---
     setIsLoading(true);
     setResult('Generating Invoice...');
 
     try {
-      // 4. Map Your Form Data to Backend Expectations
       const payload = {
         firstName: formData['First Name'],
         lastName: formData['Last Name'],
@@ -92,13 +90,9 @@ export default function GroupBookingsPage() {
         roomType: 'Group Booking' 
       };
 
-      // 5. Send to Backend
       await submitGroupBooking(payload);
 
       setResult('Form submitted successfully! Check your email for the invoice.');
-      
-      // Optional: Reset form or redirect
-      // setTimeout(() => router.push('/'), 3000);
 
     } catch (error) {
       console.error(error);
@@ -139,13 +133,13 @@ export default function GroupBookingsPage() {
                 </div>
                 <FormInput label="Email" name="Email" type="email" placeholder="e.g. example@email.com" value={formData['Email']} onChange={handleChange} required />
                 
-                {/* Updated Date Inputs with Min Date Restriction */}
+                {/* --- DATE INPUTS WITH RESTRICTIONS --- */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6">
                   <FormInput 
                     label="Check In" 
                     name="Check In" 
                     type="date" 
-                    min={today} // Restrict past dates
+                    min={today} // Prevents past dates
                     value={formData['Check In']} 
                     onChange={handleChange} 
                     required 
@@ -154,7 +148,7 @@ export default function GroupBookingsPage() {
                     label="Check Out" 
                     name="Check Out" 
                     type="date" 
-                    min={formData['Check In'] || today} // Ensure check-out is after check-in
+                    min={formData['Check In'] || today} // Check-out must be after check-in
                     value={formData['Check Out']} 
                     onChange={handleChange} 
                     required 

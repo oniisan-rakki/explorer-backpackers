@@ -1,9 +1,5 @@
 "use client";
-import React from "react";
-import usePlacesAutocomplete, {
-  getGeocode,
-  getLatLng,
-} from "use-places-autocomplete";
+import React, { useState, useEffect, useRef } from "react";
 
 interface AddressAutocompleteProps {
   onSelectAddress: (address: string) => void;
@@ -11,60 +7,69 @@ interface AddressAutocompleteProps {
 }
 
 const AddressAutocomplete: React.FC<AddressAutocompleteProps> = ({ onSelectAddress, defaultValue = "" }) => {
-  const {
-    ready,
-    value,
-    suggestions: { status, data },
-    setValue,
-    clearSuggestions,
-  } = usePlacesAutocomplete({
-    requestOptions: {
-      componentRestrictions: { country: "za" }, // Restrict to South Africa
-    },
-    debounce: 300,
-    defaultValue,
-  });
+  const [value, setValue] = useState(defaultValue);
+  const [suggestions, setSuggestions] = useState<any[]>([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const autocompleteService = useRef<any>(null);
 
-  const handleSelect = async (address: string) => {
-    setValue(address, false);
-    clearSuggestions();
-    
-    // Pass the selected address back to the parent
-    onSelectAddress(address);
-
-    // Optional: If you need coordinates in the future
-    try {
-      const results = await getGeocode({ address });
-      const { lat, lng } = await getLatLng(results[0]);
-      console.log("📍 Coordinates:", lat, lng);
-    } catch (error) {
-      console.error("Error fetching coordinates: ", error);
+  useEffect(() => {
+    // Initialize the service when the component mounts and Google Maps is available
+    if ((window as any).google && (window as any).google.maps && (window as any).google.maps.places) {
+      autocompleteService.current = new (window as any).google.maps.places.AutocompleteService();
     }
+  }, []);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value;
+    setValue(val);
+    onSelectAddress(val);
+
+    if (!val || !autocompleteService.current) {
+      setSuggestions([]);
+      return;
+    }
+
+    // Fetch predictions from Google Maps Places API
+    autocompleteService.current.getPlacePredictions({
+      input: val,
+      componentRestrictions: { country: "za" }, // Restrict to South Africa
+    }, (predictions: any[], status: any) => {
+      if (status === (window as any).google.maps.places.PlacesServiceStatus.OK && predictions) {
+        setSuggestions(predictions);
+        setShowSuggestions(true);
+      } else {
+        setSuggestions([]);
+      }
+    });
+  };
+
+  const handleSelect = (description: string) => {
+    setValue(description);
+    onSelectAddress(description);
+    setSuggestions([]);
+    setShowSuggestions(false);
   };
 
   return (
     <div className="relative w-full">
       <input
+        type="text"
         value={value}
-        onChange={(e) => {
-          setValue(e.target.value);
-          onSelectAddress(e.target.value); // Update parent even on typing
-        }}
-        disabled={!ready}
-        className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 h-12"
+        onChange={handleChange}
         placeholder="Start typing hotel name or address..."
+        className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 h-12"
+        autoComplete="off"
       />
       
-      {/* Dropdown Suggestions */}
-      {status === "OK" && (
+      {showSuggestions && suggestions.length > 0 && (
         <ul className="absolute z-50 w-full bg-white border border-gray-200 rounded-lg shadow-xl mt-1 max-h-60 overflow-y-auto">
-          {data.map(({ place_id, description }) => (
+          {suggestions.map((suggestion) => (
             <li
-              key={place_id}
-              onClick={() => handleSelect(description)}
+              key={suggestion.place_id}
+              onClick={() => handleSelect(suggestion.description)}
               className="px-4 py-3 hover:bg-green-50 cursor-pointer text-gray-700 text-sm border-b border-gray-100 last:border-0 transition-colors"
             >
-              {description}
+              {suggestion.description}
             </li>
           ))}
         </ul>
