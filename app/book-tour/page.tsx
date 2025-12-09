@@ -1,11 +1,13 @@
 "use client";
-import React, { useState, useEffect, useRef, Suspense } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
+import Script from 'next/script'; // Robust script loading
 import { PageTitle } from '../components/PageTitle';
 import { Button } from '../components/Button';
 import { FormInput } from '../components/FormInput';
 import { FormTextarea } from '../components/FormTextarea';
+import AddressAutocomplete from '../components/AddressAutocomplete'; // Import new component
 import { images } from '../data/images';
 import { processYocoTourPayment } from '../lib/api';
 import { getTourById } from '../lib/utils'; 
@@ -19,10 +21,9 @@ type TourBookingData = {
   selectedTier?: any;
 };
 
-// --- Helper to safely parse price strings (e.g. "R 2000" -> 2000) ---
+// --- Helper to safely parse price strings ---
 const parsePrice = (priceStr: string | null) => {
   if (!priceStr) return 0;
-  // Remove anything that is NOT a digit or a dot
   const cleanStr = priceStr.toString().replace(/[^0-9.]/g, '');
   const num = parseFloat(cleanStr);
   return isNaN(num) ? 0 : num;
@@ -31,7 +32,6 @@ const parsePrice = (priceStr: string | null) => {
 function TourBookingContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const pickupInputRef = useRef<HTMLInputElement>(null);
 
   // --- 1. Reconstruct Booking Data from URL ---
   const tourId = searchParams.get('tourId');
@@ -41,7 +41,6 @@ function TourBookingContent() {
     tour: tour,
     date: searchParams.get('date') || '',
     guests: parseInt(searchParams.get('guests') || '1', 10),
-    // FIX: Use the helper function to sanitize the price string
     totalPrice: parsePrice(searchParams.get('totalPrice')), 
     selectedTier: searchParams.get('tier') ? { type: searchParams.get('tier') } : undefined
   } : null;
@@ -56,18 +55,18 @@ function TourBookingContent() {
     'Pickup Address': '' 
   });
 
+  const [agreedToTerms, setAgreedToTerms] = useState(false); // Checkbox state
   const [result, setResult] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
+  const [mapsLoaded, setMapsLoaded] = useState(false); // Track if Maps API is ready
 
-  // Extract tour data safely
   const tourAny = bookingData?.tour as any;
   const hasPickup = tourAny?.hotelPickupAvailable || tourAny?.localHotelPickup || tourAny?.isHotelPickupAvailable;
 
-  // --- Logic to determine Departure Point if no pickup ---
+  // Default departure logic
   useEffect(() => {
     if (tourAny && !hasPickup) {
         let point = "Central Meeting Point";
-        // Try to find departure info in itinerary
         if (tourAny.itinerary && tourAny.itinerary.length > 0) {
            const firstStop = tourAny.itinerary[0];
            if (firstStop.title && (firstStop.title.includes("Depart") || firstStop.title.includes("Start"))) {
@@ -76,59 +75,20 @@ function TourBookingContent() {
                point = firstStop.title;
            }
         }
-        // Override if explicit additional info exists about departure
         if (tourAny.additionalInfo) {
             const departureInfo = tourAny.additionalInfo.find((info: string) => info.includes("starts from") || info.includes("Depart") || info.includes("Meeting point"));
             if (departureInfo) point = departureInfo;
         }
-        
-        // Set the address field immediately
         setGuestDetails(prev => ({ ...prev, 'Pickup Address': point }));
     }
   }, [tourAny, hasPickup]);
 
-  // Effect to handle navigation protection
+  // Navigation protection
   useEffect(() => {
     if (!tourId || !bookingData) {
       router.push('/experiences');
     }
   }, [tourId, bookingData, router]);
-
-  // Load Google Maps Script & Init Autocomplete
-  useEffect(() => {
-    if (!hasPickup) return; 
-
-    const scriptId = 'google-maps-script';
-    if (!document.getElementById(scriptId)) {
-      const script = document.createElement('script');
-      script.id = scriptId;
-      // REPLACE YOUR_GOOGLE_MAPS_API_KEY WITH YOUR ACTUAL API KEY
-      script.src = `https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY&libraries=places`;
-      script.async = true;
-      script.defer = true;
-      document.head.appendChild(script);
-      
-      script.onload = () => {
-        initAutocomplete();
-      };
-    } else if ((window as any).google && (window as any).google.maps) {
-        initAutocomplete();
-    }
-  }, [bookingData, hasPickup]); 
-
-  const initAutocomplete = () => {
-      if (pickupInputRef.current && (window as any).google) {
-          const autocomplete = new (window as any).google.maps.places.Autocomplete(pickupInputRef.current, {
-              types: ['establishment', 'geocode'], 
-          });
-
-          autocomplete.addListener('place_changed', () => {
-              const place = autocomplete.getPlace();
-              const address = place.formatted_address || place.name || '';
-              setGuestDetails(prev => ({ ...prev, 'Pickup Address': address }));
-          });
-      }
-  };
 
   if (!bookingData) return <div className="p-20 text-center">Loading booking details...</div>;
   
@@ -143,7 +103,14 @@ function TourBookingContent() {
     setIsProcessing(true);
     setResult('');
 
-    // Check unavailable days
+    // 1. Validation: Terms & Conditions
+    if (!agreedToTerms) {
+      setResult("Please accept the Terms & Conditions to proceed.");
+      setIsProcessing(false);
+      return;
+    }
+
+    // 2. Validation: Unavailable Days
     const unavailableDays = tourAny.unavailableDays || [];
     const selectedDate = new Date(date);
     const dayOfWeek = selectedDate.getDay();
@@ -155,14 +122,13 @@ function TourBookingContent() {
       return;
     }
 
+    // 3. Validation: Pickup Address
     if (hasPickup && !guestDetails['Pickup Address'].trim()) {
-         setResult(`Please provide a pickup address in ${tourAny.pickupProvinceRestriction || 'the tour region'}.`);
+         setResult(`Please provide a pickup address.`);
          setIsProcessing(false);
          return;
     }
 
-    // --- CRITICAL FIX FOR PAYMENT ---
-    // Mapping 'totalPrice' to 'amount' so the API receives the correct parameter
     const fullTourBookingDetails = {
       amount: totalPrice, 
       firstName: guestDetails['First Name'],
@@ -192,6 +158,16 @@ function TourBookingContent() {
   return (
     <>
       <PageTitle title="Book Tour" />
+      
+      {/* Load Google Maps Script Robustly */}
+      {hasPickup && (
+        <Script
+          src={`https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY&libraries=places`}
+          strategy="beforeInteractive" // Load early but don't block hydration
+          onLoad={() => setMapsLoaded(true)}
+        />
+      )}
+
       <header className="bg-white shadow-md py-4 px-4 sticky top-0 z-40">
         <div className="container mx-auto">
           <div className="flex justify-between items-center mb-4">
@@ -233,7 +209,7 @@ function TourBookingContent() {
                 <FormInput label="Phone" name="Phone" type="tel" placeholder="e.g. +27 71 137 0207" value={guestDetails['Phone']} onChange={handleChange} required />
               </div>
 
-              {/* --- Dynamic Location Field --- */}
+              {/* --- Robust Location Field --- */}
               <div className={`p-4 rounded-md border ${hasPickup ? 'bg-blue-50 border-blue-100' : 'bg-gray-50 border-gray-200'}`}>
                   <h4 className={`font-semibold mb-2 ${hasPickup ? 'text-blue-800' : 'text-gray-800'}`}>
                     {hasPickup ? 'Hotel Pickup Required' : 'Departure Point'}
@@ -249,29 +225,59 @@ function TourBookingContent() {
                     <label htmlFor="Pickup Address" className="block text-sm font-medium text-gray-700 mb-1">
                       {hasPickup ? 'Pickup Address / Hotel Name' : 'Meeting Point'}
                     </label>
-                    <input
-                      type="text"
-                      id="Pickup Address"
-                      name="Pickup Address"
-                      ref={hasPickup ? pickupInputRef : null}
-                      placeholder={hasPickup ? "e.g. Radisson Blu, Sandton, Johannesburg" : ""}
-                      value={guestDetails['Pickup Address']}
-                      onChange={handleChange}
-                      required
-                      readOnly={!hasPickup}
-                      className={`w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 h-12 ${!hasPickup ? 'bg-gray-200 text-gray-600 cursor-not-allowed' : 'bg-white'}`}
-                    />
+                    
+                    {hasPickup ? (
+                        // NEW ROBUST AUTOCOMPLETE
+                        mapsLoaded ? (
+                            <AddressAutocomplete 
+                                defaultValue={guestDetails['Pickup Address']}
+                                onSelectAddress={(addr) => setGuestDetails(prev => ({...prev, 'Pickup Address': addr}))}
+                            />
+                        ) : (
+                            <div className="h-12 bg-gray-100 animate-pulse rounded border border-gray-300"></div>
+                        )
+                    ) : (
+                        <input
+                          type="text"
+                          name="Pickup Address"
+                          value={guestDetails['Pickup Address']}
+                          readOnly
+                          className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-200 text-gray-600 cursor-not-allowed h-12"
+                        />
+                    )}
                   </div>
               </div>
               
               <FormTextarea label="Message or Special Request" name="Special Request" placeholder="Dietary requirements, flight details, etc." value={guestDetails['Special Request']} onChange={handleChange} />
               
-              <p className="text-sm text-gray-600 !mt-6">By clicking 'Pay Now', you will be redirected to Yoco to complete your payment.</p>
+              {/* --- Terms & Conditions Checkbox --- */}
+              <div className="flex items-start mt-6">
+                <div className="flex items-center h-5">
+                  <input
+                    id="terms"
+                    name="terms"
+                    type="checkbox"
+                    checked={agreedToTerms}
+                    onChange={(e) => setAgreedToTerms(e.target.checked)}
+                    className="focus:ring-green-500 h-4 w-4 text-green-600 border-gray-300 rounded"
+                  />
+                </div>
+                <div className="ml-3 text-sm">
+                  <label htmlFor="terms" className="font-medium text-gray-700">
+                    I accept Explorer Backpackers'{" "}
+                    <Link href="/termsandconditions" target="_blank" className="text-green-600 hover:text-green-500 underline">
+                      Terms & Conditions
+                    </Link>
+                  </label>
+                </div>
+              </div>
 
-              <Button type="submit" disabled={isProcessing} className="w-full text-lg !mt-8">
+              <p className="text-sm text-gray-600 mt-2">By clicking 'Pay Now', you will be redirected to Yoco to complete your payment.</p>
+
+              <Button type="submit" disabled={isProcessing} className="w-full text-lg !mt-6">
                 {isProcessing ? 'Processing...' : `Pay Now R ${totalPrice.toFixed(2)}`}
               </Button>
-              {result && <p className="mt-4 text-center text-red-500">{result}</p>}
+              {result && <p className="mt-4 text-center text-red-500 font-semibold">{result}</p>}
             </form>
           </div>
         </div>

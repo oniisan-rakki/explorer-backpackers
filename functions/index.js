@@ -65,96 +65,225 @@ async function sendEmail(to, subject, text, attachments = []) {
 async function generateInvoicePDF(data, type) {
   const pdfDoc = await PDFDocument.create();
   const page = pdfDoc.addPage([595.28, 841.89]); // A4 Size
-  const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
-  const boldFont = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
   const { height, width } = page.getSize();
 
-  // 1. LOAD LOGO
+  // 1. EMBED CUSTOM FONTS (Poppins)
+  let font, boldFont;
+  
+  try {
+    const fontPath = path.join(__dirname, "assets", "Poppins-Regular.ttf");
+    const boldFontPath = path.join(__dirname, "assets", "Poppins-Bold.ttf");
+
+    if (fs.existsSync(fontPath) && fs.existsSync(boldFontPath)) {
+      const fontBytes = fs.readFileSync(fontPath);
+      const boldFontBytes = fs.readFileSync(boldFontPath);
+      font = await pdfDoc.embedFont(fontBytes);
+      boldFont = await pdfDoc.embedFont(boldFontBytes);
+    } else {
+      console.warn("Poppins font not found, falling back to Helvetica");
+      font = await pdfDoc.embedFont(StandardFonts.Helvetica);
+      boldFont = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
+    }
+  } catch (e) {
+    console.error("Font loading error:", e);
+    font = await pdfDoc.embedFont(StandardFonts.Helvetica);
+    boldFont = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
+  }
+
+  // 2. LOAD LOGO
   try {
     const logoPath = path.join(__dirname, "assets", "logo.png");
     if (fs.existsSync(logoPath)) {
       const logoBytes = fs.readFileSync(logoPath);
       const logoImage = await pdfDoc.embedPng(logoBytes);
-      const dims = logoImage.scale(0.25);
+      const dims = logoImage.scale(0.75); 
       page.drawImage(logoImage, { x: 50, y: height - 100, width: dims.width, height: dims.height });
     }
   } catch (e) { /* Ignore logo error */ }
 
-  // 2. HEADER DETAILS
-  page.drawText(type === 'tour' ? "TAX INVOICE" : "SALES INVOICE", { x: 400, y: height - 60, size: 18, font: boldFont });
+  // 3. HEADER DETAILS
+  // Both Tour and Group use "SALES INVOICE" now
+  page.drawText("SALES INVOICE", { x: 400, y: height - 60, size: 18, font: boldFont });
   
-  page.drawText("Explorer Backpackers", { x: 50, y: height - 120, size: 12, font: boldFont });
-  page.drawText("27 7th Street, Parkhurst", { x: 50, y: height - 135, size: 10, font });
-  page.drawText("Randburg, 2193", { x: 50, y: height - 148, size: 10, font });
-  page.drawText("VAT Nr: 4940316674", { x: 50, y: height - 161, size: 10, font });
+  // Company Info (With Spacing & No VAT)
+  let yPos = height - 130; 
+  const textSpacing = 15;
 
-  // 3. CUSTOMER & INVOICE INFO
-  let yPos = height - 200;
+  page.drawText("Explorer Backpackers", { x: 50, y: yPos, size: 12, font: boldFont });
+  yPos -= textSpacing;
+  page.drawText("27 7th Street, Parkhurst", { x: 50, y: yPos, size: 10, font });
+  yPos -= textSpacing;
+  page.drawText("Randburg, 2193", { x: 50, y: yPos, size: 10, font });
+  yPos -= textSpacing;
+  page.drawText("bookings@explorerbackpackers.com", { x: 50, y: yPos, size: 10, font });
+  yPos -= textSpacing;
+  page.drawText("+27 71 137 0207", { x: 50, y: yPos, size: 10, font });
+
+  // 4. CUSTOMER & INVOICE META
+  yPos = height - 200; // Reset Y for right side meta
   
   const invoiceNum = data.invoiceNumber || `INV-${Math.floor(Math.random() * 100000)}`;
   const dateStr = new Date().toISOString().split('T')[0];
   
+  // Right Side: Meta
   page.drawText("INVOICE NO:", { x: 400, y: yPos, size: 10, font: boldFont });
   page.drawText(invoiceNum, { x: 500, y: yPos, size: 10, font });
-  page.drawText("DATE:", { x: 400, y: yPos - 15, size: 10, font: boldFont });
-  page.drawText(dateStr, { x: 500, y: yPos - 15, size: 10, font });
-
-  page.drawText("ISSUED TO:", { x: 50, y: yPos, size: 10, font: boldFont });
-  page.drawText(`${data.firstName} ${data.lastName}`, { x: 50, y: yPos - 15, size: 12, font });
-  page.drawText(data.email, { x: 50, y: yPos - 30, size: 10, font });
-
-  // 4. TABLE HEADERS
-  yPos -= 60;
-  page.drawRectangle({ x: 40, y: yPos - 5, width: 515, height: 20, color: rgb(0.9, 0.9, 0.9) });
-  page.drawText("DESCRIPTION", { x: 50, y: yPos, size: 10, font: boldFont });
-  page.drawText("QTY/NIGHTS", { x: 300, y: yPos, size: 10, font: boldFont });
-  page.drawText("AMOUNT", { x: 450, y: yPos, size: 10, font: boldFont });
-
-  // 5. TABLE ROWS
-  yPos -= 25;
-  const description = data.itemName || data.roomName || data.tourName || "Booking";
-  const qty = data.nights || data.guests || 1;
-  const originalAmount = data.originalTotal || data.totalCost || data.amount; 
   
-  page.drawText(description.substring(0, 40), { x: 50, y: yPos, size: 10, font });
-  page.drawText(String(qty), { x: 310, y: yPos, size: 10, font });
-  page.drawText(`R ${parseFloat(originalAmount).toFixed(2)}`, { x: 450, y: yPos, size: 10, font });
+  yPos -= textSpacing;
+  page.drawText("DATE:", { x: 400, y: yPos, size: 10, font: boldFont });
+  page.drawText(dateStr, { x: 500, y: yPos, size: 10, font });
 
-  // 6. TOTALS & DISCOUNT
-  yPos -= 40;
+  // Status
+  yPos -= textSpacing;
+  const status = type === 'tour' ? "PAID" : "UNPAID";
+  const statusColor = type === 'tour' ? rgb(0, 0.6, 0) : rgb(0.8, 0, 0);
+  page.drawText("STATUS:", { x: 400, y: yPos, size: 10, font: boldFont });
+  page.drawText(status, { x: 500, y: yPos, size: 10, font: boldFont, color: statusColor });
+
+  // Left Side: Bill To
+  yPos -= 40; 
+  // Separator Line
+  page.drawLine({ start: { x: 50, y: yPos }, end: { x: 545, y: yPos }, thickness: 1, color: rgb(0.85, 0.85, 0.85) });
   
-  if (type === 'group') {
-    // Show Discount Row
-    page.drawText("DISCOUNT (25%)", { x: 50, y: yPos, size: 10, font: boldFont, color: rgb(0.8, 0, 0) });
-    page.drawText(`- R ${parseFloat(data.discountAmount).toFixed(2)}`, { x: 450, y: yPos, size: 10, font: boldFont, color: rgb(0.8, 0, 0) });
-    yPos -= 20;
+  yPos -= 20;
+  page.drawText("BILL TO:", { x: 50, y: yPos, size: 10, font: boldFont, color: rgb(0.5, 0.5, 0.5) });
+  yPos -= 20;
+  page.drawText(`${data.firstName} ${data.lastName}`, { x: 50, y: yPos, size: 14, font: boldFont });
+  yPos -= 15;
+  page.drawText(data.email, { x: 50, y: yPos, size: 10, font });
+  if (data.phone) {
+    yPos -= 15;
+    page.drawText(data.phone, { x: 50, y: yPos, size: 10, font });
   }
 
-  // Grand Total Line
-  page.drawLine({ start: { x: 400, y: yPos + 10 }, end: { x: 550, y: yPos + 10 }, thickness: 1 });
-  page.drawText("TOTAL", { x: 350, y: yPos - 5, size: 14, font: boldFont });
-  page.drawText(`R ${parseFloat(data.finalTotal || data.amount).toFixed(2)}`, { x: 450, y: yPos - 5, size: 14, font: boldFont });
+  // 5. TABLE HEADERS
+  yPos -= 60;
+  
+  // Gray Background
+  page.drawRectangle({ x: 40, y: yPos - 8, width: 515, height: 24, color: rgb(0.96, 0.96, 0.96) });
 
-  // 7. FOOTER & CLAUSES
-  yPos -= 80;
+  const col1 = 50;  // Description
+  const col4 = 480; // Amount (Base position for alignment)
+
+  if (type === 'group') {
+      // Group Columns: Qty, Rate, Nights, Amount
+      const col2 = 300; // Qty
+      const col2b = 350; // Rate
+      const col3 = 420; // Nights
+
+      page.drawText("DESCRIPTION", { x: col1, y: yPos, size: 9, font: boldFont });
+      page.drawText("QUANTITY", { x: col2 - 10, y: yPos, size: 9, font: boldFont });
+      page.drawText("RATE", { x: col2b, y: yPos, size: 9, font: boldFont });
+      page.drawText("NIGHTS", { x: col3 - 5, y: yPos, size: 9, font: boldFont });
+      page.drawText("AMOUNT", { x: 500, y: yPos, size: 9, font: boldFont }); // Manually aligned right
+
+      // Separator
+      yPos -= 10;
+      page.drawLine({ start: { x: 50, y: yPos }, end: { x: 545, y: yPos }, thickness: 1, color: rgb(0.8, 0.8, 0.8) });
+
+      // ROW DATA
+      yPos -= 20;
+      const qty = data.guests || 1;
+      const nights = data.nights || 1;
+      const rate = data.rate || 345; 
+      const originalTotal = data.originalTotal || (qty * nights * rate);
+
+      page.drawText("Group Booking", { x: col1, y: yPos, size: 10, font });
+      page.drawText(String(qty), { x: col2 + 15, y: yPos, size: 10, font });
+      page.drawText(`R ${rate}`, { x: col2b, y: yPos, size: 10, font });
+      page.drawText(String(nights), { x: col3 + 10, y: yPos, size: 10, font });
+      page.drawText(`R ${parseFloat(originalTotal).toFixed(2)}`, { x: 500, y: yPos, size: 10, font });
+
+  } else {
+      // Tour Columns: Description, Qty, Amount
+      const colQty = 400; 
+
+      page.drawText("DESCRIPTION", { x: col1, y: yPos, size: 9, font: boldFont });
+      page.drawText("QUANTITY", { x: colQty, y: yPos, size: 9, font: boldFont });
+      page.drawText("AMOUNT", { x: 500, y: yPos, size: 9, font: boldFont });
+
+      // Separator
+      yPos -= 10;
+      page.drawLine({ start: { x: 50, y: yPos }, end: { x: 545, y: yPos }, thickness: 1, color: rgb(0.8, 0.8, 0.8) });
+
+      // ROW DATA
+      yPos -= 20;
+      const tourName = data.itemName || data.tourName || "Tour Booking";
+      const qty = 1; 
+      const amount = data.amount || data.totalCost;
+
+      page.drawText(`Tour Booking: ${tourName}`, { x: col1, y: yPos, size: 10, font });
+      page.drawText(String(qty), { x: colQty + 15, y: yPos, size: 10, font });
+      page.drawText(`R ${parseFloat(amount).toFixed(2)}`, { x: 500, y: yPos, size: 10, font });
+  }
+
+  // Separator
+  yPos -= 15;
+  page.drawLine({ start: { x: 50, y: yPos }, end: { x: 545, y: yPos }, thickness: 1, color: rgb(0.9, 0.9, 0.9) });
+
+  // 6. TOTALS SECTION
+  yPos -= 30;
+  
+  if (type === 'group') {
+    // Discount Row
+    const discount = parseFloat(data.discountAmount || 0).toFixed(2);
+    page.drawText("Discount (25%)", { x: 350, y: yPos, size: 10, font });
+    page.drawText(`- R ${discount}`, { x: 500, y: yPos, size: 10, font, color: rgb(0, 0, 0) });
+    yPos -= 20;
+    
+    // Grand Total Line
+    page.drawLine({ start: { x: 350, y: yPos + 10 }, end: { x: 545, y: yPos + 10 }, thickness: 1 });
+    
+    const finalTotal = parseFloat(data.finalTotal || data.amount).toFixed(2);
+    page.drawText("TOTAL", { x: 350, y: yPos - 5, size: 14, font: boldFont });
+    page.drawText(`R ${finalTotal}`, { x: 500, y: yPos - 5, size: 14, font: boldFont });
+
+  } else {
+    // Tour Totals: Amount Paid
+    const amountPaid = parseFloat(data.amount || data.totalCost).toFixed(2);
+    
+    page.drawText("Amount Paid", { x: 350, y: yPos, size: 10, font: boldFont });
+    page.drawText(`R ${amountPaid}`, { x: 500, y: yPos, size: 10, font: boldFont });
+    
+    yPos -= 20;
+    page.drawLine({ start: { x: 350, y: yPos + 10 }, end: { x: 545, y: yPos + 10 }, thickness: 1 });
+    
+    page.drawText("TOTAL DUE", { x: 350, y: yPos - 5, size: 14, font: boldFont });
+    page.drawText("R 0.00", { x: 500, y: yPos - 5, size: 14, font: boldFont });
+  }
+
+  // 7. FOOTER / STAMPS / TERMS
+  yPos -= 100;
 
   if (type === 'tour') {
-    // TOUR: PAID Stamp
-    const stampText = "PAID";
-    page.drawText(stampText, {
-      x: 200, y: yPos, size: 60, font: boldFont,
-      color: rgb(0, 0.6, 0), opacity: 0.3,
-      rotate: { type: "degrees", angle: 25 },
-    });
-    page.drawText("Thank you for your business!", { x: 200, y: 50, size: 10, font, color: rgb(0.5, 0.5, 0.5) });
+    // Footer Contact Info
+    const footerText = "tel: +27 71 137 0207 / Email: bookings@explorerbackpackers.com / www.explorerbackpackers.com";
+    const textWidth = font.widthOfTextAtSize(footerText, 9);
+    const centerX = (width - textWidth) / 2;
+    page.drawText(footerText, { x: centerX, y: 50, size: 9, font, color: rgb(0, 0, 0) });
   
   } else if (type === 'group') {
-    // GROUP: Clause, NO BANK DETAILS
-    page.drawText("TERMS & CONFIRMATION:", { x: 50, y: yPos, size: 10, font: boldFont });
-    yPos -= 15;
-    page.drawText("Bookings will be confirmed upon confirmation as in we will check our space", { x: 50, y: yPos, size: 9, font });
-    yPos -= 12;
-    page.drawText("and if it is available we can service you.", { x: 50, y: yPos, size: 9, font });
+    // GROUP TERMS
+    page.drawText("TERMS & CONDITIONS:", { x: 50, y: yPos, size: 10, font: boldFont });
+    
+    const terms = [
+        "1. Confirmation: This booking is subject to availability and will be confirmed upon receipt of a 50% deposit.",
+        "2. Payment: Full payment is required 7 days prior to arrival.",
+        "3. Cancellation: Cancellations made less than 7 days before arrival are non-refundable.",
+        "4. Rules: Guests are expected to adhere to the hostel's code of conduct."
+    ];
+
+    let termY = yPos - 20;
+    for (const term of terms) {
+        page.drawText(term, { x: 50, y: termY, size: 9, font, color: rgb(0, 0, 0) });
+        termY -= 15;
+    }
+    
+    // Add Footer Contact Info for Group too
+    const footerText = "tel: +27 71 137 0207 / Email: bookings@explorerbackpackers.com / www.explorerbackpackers.com";
+    const textWidth = font.widthOfTextAtSize(footerText, 9);
+    const centerX = (width - textWidth) / 2;
+    page.drawText(footerText, { x: centerX, y: 50, size: 9, font, color: rgb(0, 0, 0) });
   }
 
   return await pdfDoc.save();
