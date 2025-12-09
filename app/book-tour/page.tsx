@@ -1,13 +1,11 @@
 "use client";
-import React, { useState, useEffect, Suspense } from 'react';
+import React, { useState, useEffect, useRef, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import Script from 'next/script'; 
 import { PageTitle } from '../components/PageTitle';
 import { Button } from '../components/Button';
 import { FormInput } from '../components/FormInput';
 import { FormTextarea } from '../components/FormTextarea';
-import AddressAutocomplete from '../components/AddressAutocomplete'; 
 import { images } from '../data/images';
 import { processYocoTourPayment } from '../lib/api';
 import { getTourById } from '../lib/utils'; 
@@ -32,7 +30,10 @@ const parsePrice = (priceStr: string | null) => {
 function TourBookingContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const pickupInputRef = useRef<HTMLInputElement>(null);
+  const autoCompleteRef = useRef<any>(null); // Store the autocomplete instance
 
+  // --- 1. Reconstruct Booking Data from URL ---
   const tourId = searchParams.get('tourId');
   const tour = tourId ? getTourById(tourId) : null;
   
@@ -44,6 +45,7 @@ function TourBookingContent() {
     selectedTier: searchParams.get('tier') ? { type: searchParams.get('tier') } : undefined
   } : null;
 
+  // --- 2. State & Logic ---
   const [guestDetails, setGuestDetails] = useState({
     'First Name': '',
     'Last Name': '',
@@ -57,9 +59,19 @@ function TourBookingContent() {
   const [result, setResult] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
 
+  // Extract tour data safely
   const tourAny = bookingData?.tour as any;
   const hasPickup = tourAny?.hotelPickupAvailable || tourAny?.localHotelPickup || tourAny?.isHotelPickupAvailable;
 
+  // --- DATE LOGIC: Calculate "Tomorrow" ---
+  const getTomorrow = () => {
+    const date = new Date();
+    date.setDate(date.getDate() + 1); // Add 1 day
+    return date.toISOString().split('T')[0];
+  };
+  const minDate = getTomorrow();
+
+  // --- Logic to determine Departure Point if no pickup ---
   useEffect(() => {
     if (tourAny && !hasPickup) {
         let point = "Central Meeting Point";
@@ -79,11 +91,66 @@ function TourBookingContent() {
     }
   }, [tourAny, hasPickup]);
 
+  // Navigation protection
   useEffect(() => {
     if (!tourId || !bookingData) {
       router.push('/experiences');
     }
   }, [tourId, bookingData, router]);
+
+  // --- GOOGLE MAPS AUTOCOMPLETE LOGIC ---
+  useEffect(() => {
+    if (!hasPickup) return;
+
+    // 1. Check if script exists, if not add it
+    const scriptId = 'google-maps-script';
+    if (!document.getElementById(scriptId)) {
+      const script = document.createElement('script');
+      script.id = scriptId;
+      // ✅ API KEY INSERTED HERE
+      script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyA7KOFacLSxgcxHc_DICLV98qA9CfkdZpc&libraries=places`;
+      script.async = true;
+      script.defer = true;
+      document.head.appendChild(script);
+    }
+
+    // 2. Poll for Google Maps API to be ready
+    const intervalId = setInterval(() => {
+      if ((window as any).google && (window as any).google.maps && (window as any).google.maps.places && pickupInputRef.current) {
+        // Only initialize if we haven't already
+        if (!autoCompleteRef.current) {
+          initAutocomplete();
+        }
+        clearInterval(intervalId);
+      }
+    }, 500); // Check every 500ms
+
+    return () => clearInterval(intervalId);
+  }, [hasPickup]);
+
+  const initAutocomplete = () => {
+    if (!pickupInputRef.current || !(window as any).google) return;
+
+    console.log("Initializing Google Autocomplete...");
+    
+    // Create the Autocomplete object
+    const autocomplete = new (window as any).google.maps.places.Autocomplete(pickupInputRef.current, {
+      componentRestrictions: { country: "za" }, // Restrict to South Africa
+      fields: ["formatted_address", "name"],    // Only fetch what we need
+      types: ["establishment", "geocode"],      // Allow hotels and addresses
+    });
+
+    autoCompleteRef.current = autocomplete;
+
+    // Add listener
+    autocomplete.addListener('place_changed', () => {
+      const place = autocomplete.getPlace();
+      console.log("Place selected:", place);
+      const address = place.formatted_address || place.name || '';
+      
+      setGuestDetails(prev => ({ ...prev, 'Pickup Address': address }));
+    });
+  };
 
   if (!bookingData) return <div className="p-20 text-center">Loading booking details...</div>;
   
@@ -98,12 +165,14 @@ function TourBookingContent() {
     setIsProcessing(true);
     setResult('');
 
+    // Validation: Terms
     if (!agreedToTerms) {
       setResult("Please accept the Terms & Conditions to proceed.");
       setIsProcessing(false);
       return;
     }
 
+    // Validation: Unavailable Days
     const unavailableDays = tourAny.unavailableDays || [];
     const selectedDate = new Date(date);
     const dayOfWeek = selectedDate.getDay();
@@ -115,6 +184,7 @@ function TourBookingContent() {
       return;
     }
 
+    // Validation: Pickup Address
     if (hasPickup && !guestDetails['Pickup Address'].trim()) {
          setResult(`Please provide a pickup address.`);
          setIsProcessing(false);
@@ -151,12 +221,13 @@ function TourBookingContent() {
     <>
       <PageTitle title="Book Tour" />
       
-      {hasPickup && (
-        <Script
-          src={`https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY&libraries=places`}
-          strategy="afterInteractive"
-        />
-      )}
+      {/* CSS FORCE FIX: Ensure Google Maps Dropdown is Visible */}
+      <style jsx global>{`
+        .pac-container {
+          z-index: 10000 !important; /* Force above everything */
+          font-family: 'Poppins', sans-serif; /* Match your theme */
+        }
+      `}</style>
 
       <header className="bg-white shadow-md py-4 px-4 sticky top-0 z-40">
         <div className="container mx-auto">
@@ -198,6 +269,7 @@ function TourBookingContent() {
                 <FormInput label="Phone" name="Phone" type="tel" placeholder="e.g. +27 71 137 0207" value={guestDetails['Phone']} onChange={handleChange} required />
               </div>
 
+              {/* --- Robust Location Field --- */}
               <div className={`p-4 rounded-md border ${hasPickup ? 'bg-blue-50 border-blue-100' : 'bg-gray-50 border-gray-200'}`}>
                   <h4 className={`font-semibold mb-2 ${hasPickup ? 'text-blue-800' : 'text-gray-800'}`}>
                     {hasPickup ? 'Hotel Pickup Required' : 'Departure Point'}
@@ -214,25 +286,23 @@ function TourBookingContent() {
                       {hasPickup ? 'Pickup Address / Hotel Name' : 'Meeting Point'}
                     </label>
                     
-                    {hasPickup ? (
-                        <AddressAutocomplete 
-                            defaultValue={guestDetails['Pickup Address']}
-                            onSelectAddress={(addr) => setGuestDetails(prev => ({...prev, 'Pickup Address': addr}))}
-                        />
-                    ) : (
-                        <input
-                          type="text"
-                          name="Pickup Address"
-                          value={guestDetails['Pickup Address']}
-                          readOnly
-                          className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-200 text-gray-600 cursor-not-allowed h-12"
-                        />
-                    )}
+                    {/* The Input Ref attaches the Google Autocomplete here */}
+                    <input
+                      type="text"
+                      name="Pickup Address"
+                      ref={pickupInputRef} 
+                      value={guestDetails['Pickup Address']}
+                      onChange={handleChange}
+                      readOnly={!hasPickup}
+                      placeholder={hasPickup ? "Start typing to search..." : ""}
+                      className={`w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm h-12 ${hasPickup ? 'focus:ring-green-500 focus:border-green-500 bg-white' : 'bg-gray-200 text-gray-600 cursor-not-allowed'}`}
+                    />
                   </div>
               </div>
               
               <FormTextarea label="Message or Special Request" name="Special Request" placeholder="Dietary requirements, flight details, etc." value={guestDetails['Special Request']} onChange={handleChange} />
               
+              {/* Terms Checkbox */}
               <div className="flex items-start mt-6">
                 <div className="flex items-center h-5">
                   <input
@@ -268,6 +338,7 @@ function TourBookingContent() {
   );
 }
 
+// --- MAIN PAGE EXPORT ---
 export default function TourBookingPage() {
   return (
     <Suspense fallback={<div className="p-20 text-center">Loading tour booking...</div>}>

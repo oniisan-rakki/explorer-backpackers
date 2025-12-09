@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 interface AddressAutocompleteProps {
   onSelectAddress: (address: string) => void;
@@ -7,94 +7,59 @@ interface AddressAutocompleteProps {
 }
 
 const AddressAutocomplete: React.FC<AddressAutocompleteProps> = ({ onSelectAddress, defaultValue = "" }) => {
-  const [value, setValue] = useState(defaultValue);
-  const [suggestions, setSuggestions] = useState<any[]>([]);
-  const [showSuggestions, setShowSuggestions] = useState(false);
-  const autocompleteService = useRef<any>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [inputValue, setInputValue] = useState(defaultValue);
 
   useEffect(() => {
-    // Try to initialize immediately
-    initService();
-
-    // Retry if Google Maps isn't loaded yet (e.g. slight race condition)
-    const interval = setInterval(() => {
-      if (!autocompleteService.current) {
-        initService();
-      } else {
-        clearInterval(interval);
+    // 1. Wait for Google Maps to load
+    const checkForGoogle = setInterval(() => {
+      if ((window as any).google && (window as any).google.maps && (window as any).google.maps.places) {
+        clearInterval(checkForGoogle);
+        initAutocomplete();
       }
     }, 500);
 
-    return () => clearInterval(interval);
+    return () => clearInterval(checkForGoogle);
   }, []);
 
-  const initService = () => {
-    if ((window as any).google && (window as any).google.maps && (window as any).google.maps.places) {
-      autocompleteService.current = new (window as any).google.maps.places.AutocompleteService();
-    }
-  };
+  const initAutocomplete = () => {
+    if (!inputRef.current) return;
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const val = e.target.value;
-    setValue(val);
-    onSelectAddress(val);
+    console.log("🚀 Initializing Google Maps Widget...");
 
-    if (!val) {
-      setSuggestions([]);
-      return;
-    }
-
-    if (!autocompleteService.current) {
-      initService(); // Try init again just in case
-      if (!autocompleteService.current) return;
-    }
-
-    // Fetch predictions
-    autocompleteService.current.getPlacePredictions({
-      input: val,
+    // 2. Attach Google's official Autocomplete widget
+    const autocomplete = new (window as any).google.maps.places.Autocomplete(inputRef.current, {
       componentRestrictions: { country: "za" }, // Restrict to South Africa
-    }, (predictions: any[], status: any) => {
-      if (status === (window as any).google.maps.places.PlacesServiceStatus.OK && predictions) {
-        setSuggestions(predictions);
-        setShowSuggestions(true);
-      } else {
-        setSuggestions([]);
+      fields: ["formatted_address", "name"],    // Fetch only what we need
+      types: ["establishment", "geocode"],      // Allow hotels and addresses
+    });
+
+    // 3. Listen for selection
+    autocomplete.addListener("place_changed", () => {
+      const place = autocomplete.getPlace();
+      console.log("📍 Place selected:", place);
+
+      const address = place.formatted_address || place.name;
+      if (address) {
+        setInputValue(address);
+        onSelectAddress(address);
       }
     });
   };
 
-  const handleSelect = (description: string) => {
-    setValue(description);
-    onSelectAddress(description);
-    setSuggestions([]);
-    setShowSuggestions(false);
-  };
-
   return (
-    <div className="relative w-full">
-      <input
-        type="text"
-        value={value}
-        onChange={handleChange}
-        placeholder="Start typing hotel name or address..."
-        className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 h-12"
-        autoComplete="off"
-      />
-      
-      {showSuggestions && suggestions.length > 0 && (
-        <ul className="absolute z-50 w-full bg-white border border-gray-200 rounded-lg shadow-xl mt-1 max-h-60 overflow-y-auto">
-          {suggestions.map((suggestion) => (
-            <li
-              key={suggestion.place_id}
-              onClick={() => handleSelect(suggestion.description)}
-              className="px-4 py-3 hover:bg-green-50 cursor-pointer text-gray-700 text-sm border-b border-gray-100 last:border-0 transition-colors"
-            >
-              {suggestion.description}
-            </li>
-          ))}
-        </ul>
-      )}
-    </div>
+    <input
+      ref={inputRef}
+      type="text"
+      value={inputValue}
+      onChange={(e) => {
+        setInputValue(e.target.value);
+        onSelectAddress(e.target.value);
+      }}
+      placeholder="Start typing hotel name or address..."
+      className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 h-12"
+      autoComplete="off"
+    />
   );
 };
 
