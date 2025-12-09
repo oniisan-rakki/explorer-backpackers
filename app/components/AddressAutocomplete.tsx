@@ -13,23 +13,43 @@ const AddressAutocomplete: React.FC<AddressAutocompleteProps> = ({ onSelectAddre
   const autocompleteService = useRef<any>(null);
 
   useEffect(() => {
-    // Initialize the service when the component mounts and Google Maps is available
+    // Try to initialize immediately
+    initService();
+
+    // Retry if Google Maps isn't loaded yet (e.g. slight race condition)
+    const interval = setInterval(() => {
+      if (!autocompleteService.current) {
+        initService();
+      } else {
+        clearInterval(interval);
+      }
+    }, 500);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const initService = () => {
     if ((window as any).google && (window as any).google.maps && (window as any).google.maps.places) {
       autocompleteService.current = new (window as any).google.maps.places.AutocompleteService();
     }
-  }, []);
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
     setValue(val);
     onSelectAddress(val);
 
-    if (!val || !autocompleteService.current) {
+    if (!val) {
       setSuggestions([]);
       return;
     }
 
-    // Fetch predictions from Google Maps Places API
+    if (!autocompleteService.current) {
+      initService(); // Try init again just in case
+      if (!autocompleteService.current) return;
+    }
+
+    // Fetch predictions
     autocompleteService.current.getPlacePredictions({
       input: val,
       componentRestrictions: { country: "za" }, // Restrict to South Africa

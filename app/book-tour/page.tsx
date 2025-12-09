@@ -2,12 +2,12 @@
 import React, { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import Script from 'next/script'; // Robust script loading
+import Script from 'next/script'; 
 import { PageTitle } from '../components/PageTitle';
 import { Button } from '../components/Button';
 import { FormInput } from '../components/FormInput';
 import { FormTextarea } from '../components/FormTextarea';
-import AddressAutocomplete from '../components/AddressAutocomplete'; // Import new component
+import AddressAutocomplete from '../components/AddressAutocomplete'; 
 import { images } from '../data/images';
 import { processYocoTourPayment } from '../lib/api';
 import { getTourById } from '../lib/utils'; 
@@ -33,7 +33,6 @@ function TourBookingContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  // --- 1. Reconstruct Booking Data from URL ---
   const tourId = searchParams.get('tourId');
   const tour = tourId ? getTourById(tourId) : null;
   
@@ -45,7 +44,6 @@ function TourBookingContent() {
     selectedTier: searchParams.get('tier') ? { type: searchParams.get('tier') } : undefined
   } : null;
 
-  // --- 2. State & Logic ---
   const [guestDetails, setGuestDetails] = useState({
     'First Name': '',
     'Last Name': '',
@@ -55,15 +53,13 @@ function TourBookingContent() {
     'Pickup Address': '' 
   });
 
-  const [agreedToTerms, setAgreedToTerms] = useState(false); // Checkbox state
+  const [agreedToTerms, setAgreedToTerms] = useState(false);
   const [result, setResult] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
-  const [mapsLoaded, setMapsLoaded] = useState(false); // Track if Maps API is ready
 
   const tourAny = bookingData?.tour as any;
   const hasPickup = tourAny?.hotelPickupAvailable || tourAny?.localHotelPickup || tourAny?.isHotelPickupAvailable;
 
-  // Default departure logic
   useEffect(() => {
     if (tourAny && !hasPickup) {
         let point = "Central Meeting Point";
@@ -83,7 +79,6 @@ function TourBookingContent() {
     }
   }, [tourAny, hasPickup]);
 
-  // Navigation protection
   useEffect(() => {
     if (!tourId || !bookingData) {
       router.push('/experiences');
@@ -103,14 +98,12 @@ function TourBookingContent() {
     setIsProcessing(true);
     setResult('');
 
-    // 1. Validation: Terms & Conditions
     if (!agreedToTerms) {
       setResult("Please accept the Terms & Conditions to proceed.");
       setIsProcessing(false);
       return;
     }
 
-    // 2. Validation: Unavailable Days
     const unavailableDays = tourAny.unavailableDays || [];
     const selectedDate = new Date(date);
     const dayOfWeek = selectedDate.getDay();
@@ -122,7 +115,6 @@ function TourBookingContent() {
       return;
     }
 
-    // 3. Validation: Pickup Address
     if (hasPickup && !guestDetails['Pickup Address'].trim()) {
          setResult(`Please provide a pickup address.`);
          setIsProcessing(false);
@@ -159,12 +151,10 @@ function TourBookingContent() {
     <>
       <PageTitle title="Book Tour" />
       
-      {/* Load Google Maps Script Robustly */}
       {hasPickup && (
         <Script
           src={`https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY&libraries=places`}
-          strategy="beforeInteractive" // Load early but don't block hydration
-          onLoad={() => setMapsLoaded(true)}
+          strategy="afterInteractive"
         />
       )}
 
@@ -188,7 +178,6 @@ function TourBookingContent() {
           <div className="bg-white p-6 md:p-8 rounded-lg shadow-lg">
             <h2 className="text-3xl font-bold text-gray-800 text-center mb-6">Complete Your Booking</h2>
             
-            {/* Booking Summary */}
             <div className="bg-gray-50 p-6 rounded-lg shadow-inner mb-8 space-y-3">
               <FormInput label="Tour" name="Tour Name" value={tourAny.title} readOnly />
               <div className="grid grid-cols-1 md:grid-cols-3 gap-x-6">
@@ -209,7 +198,6 @@ function TourBookingContent() {
                 <FormInput label="Phone" name="Phone" type="tel" placeholder="e.g. +27 71 137 0207" value={guestDetails['Phone']} onChange={handleChange} required />
               </div>
 
-              {/* --- Robust Location Field --- */}
               <div className={`p-4 rounded-md border ${hasPickup ? 'bg-blue-50 border-blue-100' : 'bg-gray-50 border-gray-200'}`}>
                   <h4 className={`font-semibold mb-2 ${hasPickup ? 'text-blue-800' : 'text-gray-800'}`}>
                     {hasPickup ? 'Hotel Pickup Required' : 'Departure Point'}
@@ -227,15 +215,10 @@ function TourBookingContent() {
                     </label>
                     
                     {hasPickup ? (
-                        // NEW ROBUST AUTOCOMPLETE
-                        mapsLoaded ? (
-                            <AddressAutocomplete 
-                                defaultValue={guestDetails['Pickup Address']}
-                                onSelectAddress={(addr) => setGuestDetails(prev => ({...prev, 'Pickup Address': addr}))}
-                            />
-                        ) : (
-                            <div className="h-12 bg-gray-100 animate-pulse rounded border border-gray-300"></div>
-                        )
+                        <AddressAutocomplete 
+                            defaultValue={guestDetails['Pickup Address']}
+                            onSelectAddress={(addr) => setGuestDetails(prev => ({...prev, 'Pickup Address': addr}))}
+                        />
                     ) : (
                         <input
                           type="text"
@@ -250,7 +233,6 @@ function TourBookingContent() {
               
               <FormTextarea label="Message or Special Request" name="Special Request" placeholder="Dietary requirements, flight details, etc." value={guestDetails['Special Request']} onChange={handleChange} />
               
-              {/* --- Terms & Conditions Checkbox --- */}
               <div className="flex items-start mt-6">
                 <div className="flex items-center h-5">
                   <input
@@ -286,7 +268,6 @@ function TourBookingContent() {
   );
 }
 
-// --- MAIN PAGE EXPORT ---
 export default function TourBookingPage() {
   return (
     <Suspense fallback={<div className="p-20 text-center">Loading tour booking...</div>}>
