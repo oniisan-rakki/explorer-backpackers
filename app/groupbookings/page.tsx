@@ -27,6 +27,9 @@ export default function GroupBookingsPage() {
   const [result, setResult] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
+  // 1. Get today's date in YYYY-MM-DD format to restrict past dates
+  const today = new Date().toISOString().split('T')[0];
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target;
     const isCheckbox = type === 'checkbox';
@@ -135,9 +138,27 @@ export default function GroupBookingsPage() {
                   <FormInput label="Address (Optional)" name="Address" placeholder="e.g. 123 Street Name..." value={formData['Address']} onChange={handleChange} />
                 </div>
                 <FormInput label="Email" name="Email" type="email" placeholder="e.g. example@email.com" value={formData['Email']} onChange={handleChange} required />
+                
+                {/* Updated Date Inputs with Min Date Restriction */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6">
-                  <FormInput label="Check In" name="Check In" type="date" value={formData['Check In']} onChange={handleChange} required />
-                  <FormInput label="Check Out" name="Check Out" type="date" value={formData['Check Out']} onChange={handleChange} required />
+                  <FormInput 
+                    label="Check In" 
+                    name="Check In" 
+                    type="date" 
+                    min={today} // Restrict past dates
+                    value={formData['Check In']} 
+                    onChange={handleChange} 
+                    required 
+                  />
+                  <FormInput 
+                    label="Check Out" 
+                    name="Check Out" 
+                    type="date" 
+                    min={formData['Check In'] || today} // Ensure check-out is after check-in
+                    value={formData['Check Out']} 
+                    onChange={handleChange} 
+                    required 
+                  />
                 </div>
                 
                 <FormInput 
