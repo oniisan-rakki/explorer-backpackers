@@ -7,11 +7,11 @@ import { Button } from '../components/Button';
 import { FormInput } from '../components/FormInput';
 import { FormTextarea } from '../components/FormTextarea';
 import { images } from '../data/images';
+import { submitGroupBooking } from '../lib/api'; 
 
 export default function GroupBookingsPage() {
   const router = useRouter();
   const [formData, setFormData] = useState({
-    access_key: '5a445992-01ad-4adf-8c04-e7ddabad7b6d',
     'First Name': '',
     'Last Name': '',
     'Company': '',
@@ -25,10 +25,10 @@ export default function GroupBookingsPage() {
     'Acceptance': false,
   });
   const [result, setResult] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target;
-    // Handle checkboxes
     const isCheckbox = type === 'checkbox';
     const checkedValue = (e.target as HTMLInputElement).checked;
     
@@ -40,26 +40,68 @@ export default function GroupBookingsPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setResult('');
+
+    // 1. Validation: Terms
     if (!formData.Acceptance) {
       setResult('You must agree to the terms to submit.');
       return;
     }
-    setResult('Submitting....');
-    const res = await fetch("https://api.web3forms.com/submit", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json"
-      },
-      body: JSON.stringify(formData)
-    }).then((res) => res.json());
 
-    if (res.success) {
-      setResult('Form submitted successfully!');
-      // Reset form (optional)
-      // setTimeout(() => router.push('/thankyou'), 2000); 
-    } else {
+    // 2. Validation: Group Size (5 - 35)
+    const guests = parseInt(formData['Number of People']);
+    if (isNaN(guests) || guests < 5 || guests > 35) {
+      setResult('Group size must be between 5 and 35 people.');
+      return;
+    }
+
+    // 3. Calculation: Nights (Required for invoice logic)
+    const d1 = new Date(formData['Check In']);
+    const d2 = new Date(formData['Check Out']);
+    
+    if (d2 <= d1) {
+      setResult('Check-out date must be after check-in date.');
+      return;
+    }
+
+    const diffTime = Math.abs(d2.getTime() - d1.getTime());
+    const nights = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+
+    // --- UPDATED LOADING TEXT ---
+    setIsLoading(true);
+    setResult('Generating Invoice...');
+
+    try {
+      // 4. Map Your Form Data to Backend Expectations
+      const payload = {
+        firstName: formData['First Name'],
+        lastName: formData['Last Name'],
+        email: formData['Email'],
+        phone: '', 
+        guests: guests,
+        nights: nights,
+        checkIn: formData['Check In'],
+        checkOut: formData['Check Out'],
+        company: formData['Company'],
+        address: formData['Address'],
+        breakfast: formData['Breakfast'],
+        additionalInfo: formData['Special Request'],
+        roomType: 'Group Booking' 
+      };
+
+      // 5. Send to Backend
+      await submitGroupBooking(payload);
+
+      setResult('Form submitted successfully! Check your email for the invoice.');
+      
+      // Optional: Reset form or redirect
+      // setTimeout(() => router.push('/'), 3000);
+
+    } catch (error) {
+      console.error(error);
       setResult('An error occurred. Please try again.');
+    } finally {
+      setIsLoading(false);
     }
   };
   
@@ -82,6 +124,7 @@ export default function GroupBookingsPage() {
               <p className="text-gray-600 text-center mb-8">
                 Fill out this quick form, receive an invoice once you have completed the form and we will be in touch to confirm your booking with us.
               </p>
+              
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6">
                   <FormInput label="First Name" name="First Name" placeholder="e.g. Kat" value={formData['First Name']} onChange={handleChange} required />
@@ -96,7 +139,18 @@ export default function GroupBookingsPage() {
                   <FormInput label="Check In" name="Check In" type="date" value={formData['Check In']} onChange={handleChange} required />
                   <FormInput label="Check Out" name="Check Out" type="date" value={formData['Check Out']} onChange={handleChange} required />
                 </div>
-                <FormInput label="Number of People" name="Number of People" type="number" min="5" max="35" placeholder="e.g. 10" value={formData['Number of People']} onChange={handleChange} required />
+                
+                <FormInput 
+                  label="Number of People (5 - 35)" 
+                  name="Number of People" 
+                  type="number" 
+                  min="5" 
+                  max="35" 
+                  placeholder="e.g. 10" 
+                  value={formData['Number of People']} 
+                  onChange={handleChange} 
+                  required 
+                />
                 
                 <div>
                   <span className="block text-sm font-medium text-gray-700 mb-1">Breakfast (Optional)</span>
@@ -121,8 +175,15 @@ export default function GroupBookingsPage() {
                   </label>
                 </div>
 
-                <Button type="submit" className="w-full text-sm !mt-8">Submit</Button>
-                {result && <p className="mt-4 text-center text-gray-600">{result}</p>}
+                <Button type="submit" disabled={isLoading} className="w-full text-sm !mt-8">
+                  {isLoading ? 'Generating Invoice...' : 'Submit'}
+                </Button>
+                
+                {result && (
+                  <p className={`mt-4 text-center ${result.includes('successfully') ? 'text-green-600 font-bold' : (result === 'Generating Invoice...' ? 'text-blue-600' : 'text-red-600')}`}>
+                    {result}
+                  </p>
+                )}
               </form>
             </div>
           </div>

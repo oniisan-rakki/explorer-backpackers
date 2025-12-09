@@ -1,24 +1,27 @@
 "use client";
 import React, { useState } from 'react';
-import { useRouter } from 'next/navigation'; // Import useRouter
-import { PageTitle } from '../components/PageTitle'; // Adjust import path (../../)
+import { useRouter } from 'next/navigation'; 
+import { PageTitle } from '../components/PageTitle'; 
 import { HeroSection } from '../components/HeroSection';
 import { Button } from '../components/Button';
 import { FormInput } from '../components/FormInput';
 import { FormTextarea } from '../components/FormTextarea';
 import { images } from '../data/images';
+import { submitContactForm } from '../lib/api'; // Import your new API function
 
-// 1. Export Default
 export default function ContactPage() {
-  const router = useRouter(); // 2. Use Router hook
+  const router = useRouter();
+  
+  // Removed access_key from state
   const [formData, setFormData] = useState({
-    access_key: '5a445992-01ad-4adf-8c04-e7ddabad7b6d',
     'First Name': '',
     'Last Name': '',
     'Email': '',
     'Message': ''
   });
+  
   const [result, setResult] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -27,25 +30,39 @@ export default function ContactPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setResult('Submitting....');
-    const res = await fetch("https://api.web3forms.com/submit", {
-      method: "POST",
-      headers: { "Content-Type": "application/json", Accept: "application/json" },
-      body: JSON.stringify(formData)
-    }).then((res) => res.json());
+    setIsLoading(true);
 
-    if (res.success) {
+    try {
+      // Prepare data for the backend
+      const payload = {
+        name: `${formData['First Name']} ${formData['Last Name']}`,
+        email: formData['Email'],
+        // Since there is no Subject input in the UI, we set a default one
+        subject: `General Inquiry from ${formData['First Name']}`, 
+        message: formData['Message']
+      };
+
+      // Call your new Firebase Function
+      await submitContactForm(payload);
+
       setResult('Form submitted successfully!');
+      
+      // Clear form
       setFormData({
-        access_key: '5a445992-01ad-4adf-8c04-e7ddabad7b6d',
         'First Name': '',
         'Last Name': '',
         'Email': '',
         'Message': ''
       });
-      // 3. Use router.push instead of navigateTo
-      setTimeout(() => router.push('/thank-you'), 2000);
-    } else {
+      
+      // Optional: Redirect
+      // setTimeout(() => router.push('/thank-you'), 2000);
+
+    } catch (error) {
+      console.error(error);
       setResult('An error occurred. Please try again.');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -61,6 +78,7 @@ export default function ContactPage() {
         />
         <section className="py-16 lg:py-24 bg-white">
           <div className="container mx-auto px-4 grid grid-cols-1 lg:grid-cols-2 gap-16">
+            {/* Left Column: Contact Info */}
             <div>
               <h2 className="text-2xl lg:text-3xl font-extrabold text-gray-800 mb-6">Get in Touch</h2>
               <p className="text-base text-gray-600 leading-relaxed mb-10">
@@ -100,6 +118,7 @@ export default function ContactPage() {
               </div>
             </div>
 
+            {/* Right Column: Form */}
             <div>
               <div className="bg-gray-50 p-8 rounded-lg shadow-lg">
                 <form onSubmit={handleSubmit}>
@@ -109,8 +128,16 @@ export default function ContactPage() {
                   </div>
                   <FormInput label="Email" name="Email" type="email" placeholder="e.g. example@email.com" value={formData['Email']} onChange={handleChange} required />
                   <FormTextarea label="Message" name="Message" placeholder="Type your message here" value={formData['Message']} onChange={handleChange} required />
-                  <Button type="submit" className="w-full text-sm">Submit</Button>
-                  {result && <p className="mt-4 text-center text-gray-600">{result}</p>}
+                  
+                  <Button type="submit" disabled={isLoading} className="w-full text-sm">
+                    {isLoading ? 'Sending...' : 'Submit'}
+                  </Button>
+                  
+                  {result && (
+                    <p className={`mt-4 text-center ${result.includes('successfully') ? 'text-green-600' : 'text-gray-600'}`}>
+                      {result}
+                    </p>
+                  )}
                 </form>
               </div>
             </div>

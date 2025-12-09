@@ -37,7 +37,9 @@ export const checkRoomAvailability = async (
   adults: string | number, 
   promoCode: string
 ) => {
-  const firebaseFunctionUrl = `https://us-central1-explorer-backpackers.cloudfunctions.net/checkRoomAvailability`;
+  // UPDATED: Use the Gen 2 URL from your logs
+  const firebaseFunctionUrl = `https://checkroomavailability-jrqxaivzlq-uc.a.run.app`;
+  
   const params = new URLSearchParams({
     startDate: startDate,
     endDate: endDate,
@@ -64,11 +66,10 @@ export const checkRoomAvailability = async (
 
 // --- UNIFIED PAYMENT FUNCTION ---
 async function initiateCheckout(amount: number, bookingId: string, bookingType: 'tour' | 'accommodation') {
-  // 1. URL to your Cloud Function
-  const url = `https://us-central1-explorer-backpackers.cloudfunctions.net/processYocoPayment`;
+  // UPDATED: Use the Gen 2 URL from your logs
+  const url = `https://processyocopayment-jrqxaivzlq-uc.a.run.app`;
 
   try {
-    // 2. Send the ID and Amount to Yoco
     const response = await fetch(url, { 
       method: 'POST', 
       headers: { 'Content-Type': 'application/json' },
@@ -85,10 +86,7 @@ async function initiateCheckout(amount: number, bookingId: string, bookingType: 
       throw new Error(`Checkout Error: ${err}`);
     }
 
-    // 3. Return the Yoco Redirect URL
     const data = await response.json();
-    
-    // --- CRITICAL FIX: Return the string, not the object ---
     return data.redirectUrl; 
     
   } catch (error) {
@@ -100,14 +98,12 @@ async function initiateCheckout(amount: number, bookingId: string, bookingType: 
 // --- 1. PROCESS ACCOMMODATION BOOKING ---
 export async function processYocoPayment(bookingDetails: AccommodationBookingDetails) {
   try {
-    // A. Create the "Pending" Booking in Firestore
     const docRef = await addDoc(collection(db, "accommodation_bookings"), {
       ...bookingDetails,
       status: "Pending Payment",
       createdAt: new Date(),
     });
 
-    // B. Initiate Payment with the new ID
     return await initiateCheckout(bookingDetails.amount, docRef.id, 'accommodation');
 
   } catch (error) {
@@ -119,14 +115,12 @@ export async function processYocoPayment(bookingDetails: AccommodationBookingDet
 // --- 2. PROCESS TOUR BOOKING ---
 export async function processYocoTourPayment(tourBookingDetails: TourBookingDetails) {
   try {
-    // A. Create the "Pending" Booking in Firestore
     const docRef = await addDoc(collection(db, "tours_bookings"), {
       ...tourBookingDetails,
       status: "Pending Payment",
       createdAt: new Date(),
     });
 
-    // B. Initiate Payment with the new ID
     return await initiateCheckout(tourBookingDetails.amount, docRef.id, 'tour');
 
   } catch (error) {
@@ -134,3 +128,33 @@ export async function processYocoTourPayment(tourBookingDetails: TourBookingDeta
     throw error;
   }
 }
+
+// --- 3. GROUP BOOKING API CALL ---
+export const submitGroupBooking = async (data: any) => {
+  // URL from your logs
+  const url = `https://processgroupbooking-jrqxaivzlq-uc.a.run.app`;
+
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  });
+  
+  if (!response.ok) throw new Error('Failed to submit group booking');
+  return await response.json();
+};
+
+// --- 4. CONTACT FORM API CALL ---
+export const submitContactForm = async (data: { name: string; email: string; subject: string; message: string }) => {
+  // URL from your logs
+  const url = `https://sendcontactmessage-jrqxaivzlq-uc.a.run.app`;
+  
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  });
+
+  if (!response.ok) throw new Error('Failed to send message');
+  return await response.json();
+};
